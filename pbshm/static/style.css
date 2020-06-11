@@ -1,0 +1,20 @@
+/* Generic Elements */
+img.drg-logo{
+    filter:invert(80%);
+}
+/* Login Layout */
+.login-form{
+    max-width: 500px;
+}
+.login-form img.drg-logo{
+    width: 12rem;
+}
+/* Portal Layout */
+@media (min-width: 768px) {
+    .side-section{
+        flex-basis: 15rem;
+    }
+}
+a.navbar-brand img{
+    width: 3rem;
+}

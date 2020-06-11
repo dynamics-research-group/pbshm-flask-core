@@ -1,0 +1,28 @@
+{% extends 'base.html'%}
+{% block title %}Login{% endblock %}
+{% block layout %}
+<div class="d-flex bg-dark vh-100">
+    <form method="POST" class="login-form needs-validation m-auto p-4">
+        <div class="d-flex flex-column mb-3">
+            <img src="{{ url_for('static', filename='drg-logo.png') }}" class="drg-logo mx-auto mb-4">
+            <p class="text-center text-light">
+                {{ config["LOGIN_MESSAGE"] }}
+            </p>
+            {% if error is not none: %}
+            <p class="text-center bg-danger border border-danger rounded text-light p-1">
+                {{ error }}
+            </p>
+            {% elif request.args.get("reason") is not none and request.args.get("reason") == "denied": %}
+            <p class="text-center bg-danger border border-danger rounded text-light p-1">
+                Access denied.
+            </p>
+            {% endif %}
+        </div>
+        <input type="email" name="email-address" placeholder="Email Address" class="form-control mb-3" required autofocus>
+        <input type="password" name="password" placeholder="Password" class="form-control mb-3" required>
+        <button type="submit" class="btn btn-block btn-outline-success">
+            Login
+        </button> 
+    </form>
+</div>
+{% endblock %}

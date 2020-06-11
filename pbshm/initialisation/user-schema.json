@@ -1,0 +1,45 @@
+{
+    "bsonType": "object",
+    "required": [
+        "emailAddress",
+        "password",
+        "firstName",
+        "secondName",
+        "enabled"
+    ],
+    "properties": {
+        "emailAddress": {
+            "bsonType": "string",
+            "minLength": 8,
+            "maxLength": 64
+        },
+        "password": {
+            "bsonType": "string",
+            "minLength": 8,
+            "maxLength": 512
+        },
+        "firstName": {
+            "bsonType": "string",
+            "minLength": 3,
+            "maxLength": 64
+        },
+        "secondName": {
+            "bsonType": "string",
+            "minLength": 3,
+            "maxLength": 64
+        },
+        "permissions": {
+            "bsonType": "array",
+            "minItems": 0,
+            "uniqueItems": true,
+            "items": {
+                "bsonType": "string",
+                "minLength": 3,
+                "maxLength": 128
+            }
+        },
+        "enabled": {
+            "bsonType": "bool"
+        }
+    }
+}

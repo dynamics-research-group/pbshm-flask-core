@@ -1,0 +1,66 @@
+{% extends 'base.html'%}
+{% block layout %}
+<!-- Layout -->
+<div class="d-flex flex-column flex-md-row vh-100">
+    <!-- Side Section -->
+    <section class="side-section bg-dark">
+        <!-- Navigation -->
+        <nav role="navigation" class="navbar navbar-dark navbar-expand-md d-md-flex flex-md-column align-items-start h-100">
+            <!-- Logo -->
+            <a class="navbar-brand" href="/">
+                <img src="{{ url_for('static', filename='drg-logo.png') }}" class="drg-logo">
+            </a>
+            <!-- Toggle Icon -->
+            <button type="button" class="navbar-toggler mt-1" data-toggle="collapse" data-target="#side-navigation"
+                aria-controls="side-navigation" aria-expanded="false" aria-label="toggle navigation">
+                <span class="navbar-toggler-icon" aria-hidden="true"></span>
+            </button>
+            <!-- Items -->
+            <div id="side-navigation" class="collapse navbar-collapse flex-column align-items-start w-100">
+                <ul class="navbar-nav flex-column my-1 mt-md-4">
+                    {% for item in config["NAVIGATION"] %}
+                        <li class="nav-item text-white-50 text-capitalize">
+                            {{ item }}
+                            <ul class="nav flex-column">
+                                {% for sub_item in config["NAVIGATION"][item] %}
+                                    <li class="nav-item pl-2 py-1">
+                                        <a href='{{ url_for(config["NAVIGATION"][item][sub_item]) }}' class="text-white">
+                                            {{ sub_item }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <!-- Logout -->
+                <a href='{{ url_for("authentication.logout") }}' class="btn btn-block btn-outline-success mt-auto">
+                    Logout
+                </a>
+            </div>
+        </nav>
+    </section>
+    <!-- Content -->
+    <section class="d-flex flex-column flex-grow-1">
+        <!-- Header -->
+        <header>
+            <nav class="navbar navbar-light border-bottom border-secondary">
+                <h1 class="text-dark">{% block title %}&nbsp;{% endblock %}</h1>
+                <form class="inline-form">
+                    {% block title_call_to_action %}
+                    {% endblock %}
+                </form>
+            </nav>
+        </header>
+        <!-- Main Content -->
+        <main role="main" class="container-fluid flex-grow-1 mt-2">
+            {% block content %}
+            {% endblock %}
+        </main>
+        <!-- Footer -->
+        <footer class="d-flex flex-row justify-content-center bg-light p-2">
+            <div>{{ config["FOOTER_MESSAGE"] }}</div>
+        </footer>
+    </section>
+</div>
+{% endblock %}
