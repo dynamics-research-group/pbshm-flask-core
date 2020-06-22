@@ -1,0 +1,30 @@
+{% extends 'portal.html'%}
+{% block title %}Population data sets{% endblock %}
+{% block content %}
+<table class="table table-borderless table-hover mt-2">
+    <thead class="bg-info text-white">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Start Date</th>
+            <th scope="col" class="d-none d-md-block">End Date</th>
+            <th scope="col">Structures</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in populations %}
+            <tr>
+                <td class="font-weight-bold py-3">{{ item["name"] }}</td>
+                <td class="py-3">{{ item["start"] }}</td>
+                <td class="py-3 d-none d-md-block">{{ item["end"] }}</td>
+                <td class="py-3">{{ item["structures"]|length }}</td>
+                <td class="align-middle text-right">
+                    <a href='{{ item["browse"] }}' class="btn btn-outline-info">
+                        View
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

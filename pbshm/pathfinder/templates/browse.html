@@ -1,0 +1,176 @@
+{% extends 'portal.html'%}
+{% block header %}
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.17/css/bootstrap-select.min.css"
+    integrity="sha256-VMPhaMmJn7coDSbzwqB0jflvb+CDnoAlfStC5RogOQo=" crossorigin="anonymous" />
+{% endblock %}
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.17/js/bootstrap-select.min.js"
+    integrity="sha256-QOE02Glo1C1gHzP96JOaxyIMt4XSFv/exZaYLY4dwO0=" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.1.0/bokeh.min.js"
+    integrity="sha256-h2bTarGzmTcV4JQHHNrA0lnReLNUUDHFSHr5QuMO418=" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/2.1.0/bokeh-gl.min.js"
+    integrity="sha256-WmUe6n2oBO7BLG4XQyLid244olulV4B+CrnHgQtE6AI=" crossorigin="anonymous">
+</script>
+<script>
+    $(document).ready(function () {
+        //Generate view data button url on population select change
+        $("#population").change(function () {
+            var viewDataButton = $("#view-data-button");
+            viewDataButton.attr("href", viewDataButton.data("base-href").replace("selected", $(this).val()));
+        });
+        //Load population data
+        var populationHttpRequest = new XMLHttpRequest();
+        populationHttpRequest.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {//OK Response
+                var json = JSON.parse(this.responseText);
+                if (json.name.length == 0) $("#request-error").text("No population details found").parent().removeClass("d-none");
+                else {
+                    //End Date
+                    var timestampConvertEndpoint = '{{ url_for("pathfinder.convert_nanoseconds", nanoseconds=0, unit="milliseconds") }}';
+                    var timestampConvertHttpRequest = new XMLHttpRequest();
+                    timestampConvertHttpRequest.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var date = new Date(parseInt(this.responseText));
+                            $("input[name='end-date']").val(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0"));
+                            $("input[name='end-time']").val(date.getHours() + ":" + date.getMinutes());
+                            date.setDate(date.getDate() - 14);
+                            date.setSeconds(date.getSeconds() + 1);
+                            $("input[name='start-date']").val(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0"));
+                            $("input[name='start-time']").val(date.getHours() + ":" + date.getMinutes());
+                        }
+                    }
+                    timestampConvertHttpRequest.open("GET", timestampConvertEndpoint.replace("0", json.end), true);
+                    timestampConvertHttpRequest.send()
+                    //Structures
+                    var selectedStructures = {{ structures|safe }};
+                    var sortedStructures = json.structures.sort();
+                    var structureSelect = $("select[name='structures']");
+                    for (var i = 0; i < json.structures.length; i++) {
+                        var selected = false;
+                        for (var j = 0; j < selectedStructures.length; j++) {
+                            if (sortedStructures[i] != selectedStructures[j]) continue;
+                            selected = true;
+                            break;
+                        }
+                        structureSelect.append("<option" + ((selected) ? " selected" : "") + ">" + sortedStructures[i] + "</option>");
+                    }
+                    //Channels
+                    var selectedChannels = {{ channels|safe }}
+                    var sortedChannels = json.channels.sort((a, b) => {
+                        if (a.name > b.name) return 1;
+                        else if (a.name < b.name) return -1;
+                        else return 0;
+                    });
+                    var channelSelect = $("select[name='channels']");
+                    for (var i = 0; i < json.channels.length; i++) {
+                        var selected = false;
+                        for (var j = 0; j < selectedChannels.length; j++) {
+                            if (sortedChannels[i].name != selectedChannels[j]) continue;
+                            selected = true;
+                            break;
+                        }
+                        channelSelect.append("<option" + ((selected) ? " selected" : "") + " value='" + sortedChannels[i].name + "'>" + sortedChannels[i].name + " (" + sortedChannels[i].type + ((typeof sortedChannels[i].unit !== typeof undefined) ? ": " + sortedChannels[i].unit : "") + ")</option>");
+                    }
+                }
+                $("form .form-control").removeAttr("disabled");
+                $("form .selectpicker").selectpicker("refresh");
+                $("#request-loading").removeAttr("disabled").children(".spinner-border").addClass("d-none");
+            } else if (this.readyState == 1) {//Connection Established
+                $("form .form-control").attr("disabled", true);
+                $("#request-loading").attr("disabled", true).children(".spinner-border").removeClass("d-none");
+            } else if (this.readyState == 4) {//Error Status
+                $("#request-loading").removeAttr("disabled").children(".spinner-border").addClass("d-none");
+                $("#request-error").text("Error " + this.status + ": " + this.statusText).parent().removeClass("d-none");
+            }
+        }
+        populationHttpRequest.open("GET", '{{ url_for("pathfinder.population_details", population=population) }}', true);
+        populationHttpRequest.setRequestHeader("Accept", "application/json");
+        populationHttpRequest.send();
+        //Document submit
+        $(document).submit(function () {
+            $("#request-loading").attr("disabled", true).children(".spinner-border").removeClass("d-none");
+            return true;
+        });
+    });
+</script>
+{{ scripts|safe if scripts else '' }}
+{% endblock %}
+{% block title %}{{ population }}{% endblock %}
+{% block title_call_to_action %}
+<div class="input-group">
+    <select id="population" name="population" class="form-control">
+        {% for item in populations %}
+        <option {{ "selected" if item == population else "" }}>
+            {{ item }}
+        </option>
+        {% endfor %}
+    </select>
+    <div class="input-group-append">
+        <a id="view-data-button" data-base-href='{{ url_for("pathfinder.population_browse", population="selected") }}'
+            href='{{ url_for("pathfinder.population_browse", population=population) }}' class="btn btn-outline-info">
+            Switch
+        </a>
+    </div>
+</div>
+{% endblock %}
+{% block content %}
+<form method="POST">
+    <div class="row mb-2">
+        <!-- Start Date -->
+        <div class="col-md-12 col-lg-6 mb-2 mb-lg-0">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-light border-light">
+                        Start Date
+                    </span>
+                </div>
+                <input name="start-date" type="date" class="form-control border-light">
+                <input name="start-time" type="time" value="00:00" class="form-control flex-grow-0 w-25 border-light">
+            </div>
+        </div>
+        <!-- End Date -->
+        <div class="col-md-12 col-lg-6">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-light border-light">
+                        End Date
+                    </span>
+                </div>
+                <input name="end-date" type="date" class="form-control border-light">
+                <input name="end-time" type="time" value="00:00" class="form-control flex-grow-0 w-25 border-light">
+            </div>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <!-- Structures -->
+        <div class="col-md-12 col-lg-4 mb-2 mb-lg-0">
+            <select name="structures" multiple title="Structures" data-live-search="true"
+                class="form-control selectpicker">
+            </select>
+        </div>
+        <!-- Channels -->
+        <div class="col-md-12 col-lg-8">
+            <select name="channels" multiple title="Channel Names" data-live-search="true"
+                class="form-control selectpicker">
+            </select>
+        </div>
+    </div>
+    <div class="d-flex flex-row-reverse">
+        <button id="request-loading" type="submit" class="btn btn-outline-success">
+            <div class="spinner-border spinner-border-sm text-secondary mr-1 d-none" role="status">
+            </div>
+            Generate graph
+        </button>
+    </div>
+</form>
+<div class="d-none">
+    <div id="request-error" class="alert alert-danger" role="alert">
+    </div>
+</div>
+<div class="mt-2">
+    {{ figure|safe if figure else '' }}
+</div>
+{% endblock %}

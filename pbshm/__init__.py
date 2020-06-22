@@ -9,9 +9,11 @@ def create_app(test_config=None):
     app.config.from_mapping(
         PAGE_SUFFIX=" - PBSHM Flask Core",
         LOGIN_MESSAGE="Welcome to the Dynamics Research Group PBSHM Flask Core, please enter your authentication credentials below.",
-        FOOTER_MESSAGE="PBSHM Flask Core, © Dynamics Research Group 2020",
+        FOOTER_MESSAGE="PBSHM Flask Core V1.0, © Dynamics Research Group 2020",
         NAVIGATION={
-            "modules":{}
+            "modules":{
+                "Pathfinder": "pathfinder.population_list"
+            }
         }
     )
     app.config.from_json("config.json", silent=True) if test_config is None else app.config.from_mapping(test_config)
@@ -29,6 +31,12 @@ def create_app(test_config=None):
     ## Authentication
     from pbshm.authentication import authentication
     app.register_blueprint(authentication.bp, url_prefix="/authentication")
+    ## Pathfinder
+    from pbshm.pathfinder import pathfinder
+    app.register_blueprint(pathfinder.bp, url_prefix="/pathfinder")
+
+    #Set Root Page
+    app.add_url_rule("/", endpoint="pathfinder.population_list")
     
     #Return App
     return app
