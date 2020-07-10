@@ -175,23 +175,23 @@ def population_browse(population):
                             document_x[name] = [document["timestamp"]]
                             document_y[name] = [channel["value"]]
                             document_color[name] = colors.named.__all__[randint(0, len(colors.named.__all__) - 1)]
-        #Create figure
-        fig = figure(
-            tools="pan,box_zoom,reset,save",
-            output_backend="webgl",
-            plot_height=375,
-            sizing_mode="scale_width",
-            title="Population: {population} Structures: {structures} Channels: {channels}".format(
-                population=population,
-                structures=', '.join(structures) if structures else "All",
-                channels=', '.join(channels) if channels else "All"
-            ),
-            x_axis_label="Time"
-        )
-        fig.toolbar.logo=None
-        fig.toolbar.autohide=True
-        for line in document_x:
-            fig.line(document_x[line], document_y[line], line_color=document_color[line], legend_label=line)
-        js, html=components(fig)
+            #Create figure
+            fig = figure(
+                tools="pan,box_zoom,reset,save",
+                output_backend="webgl",
+                plot_height=375,
+                sizing_mode="scale_width",
+                title="Population: {population} Structures: {structures} Channels: {channels}".format(
+                    population=population,
+                    structures=', '.join(structures) if structures else "All",
+                    channels=', '.join(channels) if channels else "All"
+                ),
+                x_axis_label="Time"
+            )
+            fig.toolbar.logo=None
+            fig.toolbar.autohide=True
+            for line in document_x:
+                fig.line(document_x[line], document_y[line], line_color=document_color[line], legend_label=line)
+            js, html=components(fig)
     #Render Template
     return render_template("browse.html", error=error, population=population, populations=populations, structures=structures, channels=channels, scripts=js, figure=html)

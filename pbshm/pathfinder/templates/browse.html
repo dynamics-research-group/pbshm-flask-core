@@ -58,7 +58,7 @@
                         structureSelect.append("<option" + ((selected) ? " selected" : "") + ">" + sortedStructures[i] + "</option>");
                     }
                     //Channels
-                    var selectedChannels = {{ channels|safe }}
+                    var selectedChannels = {{ channels|safe }};
                     var sortedChannels = json.channels.sort((a, b) => {
                         if (a.name > b.name) return 1;
                         else if (a.name < b.name) return -1;
@@ -166,8 +166,9 @@
         </button>
     </div>
 </form>
-<div class="d-none">
+<div class="mt-2 {{ 'd-none' if error is none else '' }}">
     <div id="request-error" class="alert alert-danger" role="alert">
+        {{ error }}
     </div>
 </div>
 <div class="mt-2">
