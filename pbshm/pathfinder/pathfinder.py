@@ -79,7 +79,7 @@ def population_details(population):
 #List View
 @bp.route("/populations")
 @authenticate_request("pathfinder-list")
-def population_list():
+def population_list(browse_endpoint="pathfinder.population_browse"):
     #Load All Populations
     populations=[]
     for document in structure_collection().aggregate([
@@ -97,7 +97,7 @@ def population_list():
             "start":convert_nanoseconds(document["start"], "datetime"),
             "end":convert_nanoseconds(document["end"], "datetime"),
             "structures":document["structures"],
-            "browse":url_for("pathfinder.population_browse", population=document["name"])
+            "browse":url_for(browse_endpoint, population=document["name"])
         })
     #Render Template
     return render_template("list.html", populations=populations)
