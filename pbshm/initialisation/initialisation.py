@@ -7,6 +7,7 @@ from flask import Blueprint, current_app
 from urllib.parse import quote_plus
 from werkzeug.security import generate_password_hash
 from pbshm.db import db_connect
+from pbshm.mechanic.mechanic import create_new_structure_collection
 
 #Create the Initialisation Blueprint
 bp = Blueprint("initialisation", __name__, cli_group="init")
@@ -47,6 +48,8 @@ def initialise_sub_system_config(
 #Initialise Sub System: DB
 @bp.cli.command("db")
 def initialise_sub_system_db():
+    #Create Structure Collection
+    create_new_structure_collection(current_app.config["STRUCTURE_COLLECTION"])
     #Load Schema File
     with current_app.open_resource("initialisation/user-schema.json") as file:
         schema = json.load(file)
@@ -59,13 +62,14 @@ def initialise_sub_system_db():
         [("emailAddress", pymongo.ASCENDING)], unique=True
     )
 
+#Initialise Sub System: New Root User
 @bp.cli.command("new-root-user")
 @click.option("--email-address", prompt=True)
 @click.option("--password", prompt=True, hide_input=True, confirmation_prompt=True)
 @click.option("--first-name", prompt="Your first name")
 @click.option("--second-name", prompt="Your second name")
 def initialise_sub_system_new_root_user(email_address, password, first_name, second_name):
-    #Add In New User
+    #Add In New User with Root Permissions
     db = db_connect()
     db[current_app.config["USER_COLLECTION"]].insert_one({
         "emailAddress": email_address,
