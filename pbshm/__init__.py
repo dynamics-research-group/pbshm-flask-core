@@ -28,6 +28,9 @@ def create_app(test_config=None):
     ## Initialisation
     from pbshm.initialisation import initialisation
     app.register_blueprint(initialisation.bp)
+    ## Mechanic
+    from pbshm.mechanic import mechanic
+    app.register_blueprint(mechanic.bp)
     ## Authentication
     from pbshm.authentication import authentication
     app.register_blueprint(authentication.bp, url_prefix="/authentication")
