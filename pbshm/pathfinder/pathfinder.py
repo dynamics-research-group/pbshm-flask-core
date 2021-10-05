@@ -2,6 +2,7 @@ from flask import Blueprint, current_app, g, render_template, request, session, 
 from pbshm.authentication.authentication import authenticate_request
 from pbshm.db import structure_collection
 from datetime import datetime
+from pytz import utc
 from bokeh import colors
 from bokeh.plotting import figure
 from bokeh.embed import components
@@ -14,10 +15,14 @@ bp = Blueprint(
     template_folder="templates"
 )
 
-# Convert DataTime to nanoseconds since epoch
+# Convert datetime to nanoseconds since epoch
 def datetime_to_nanoseconds_since_epoch(timestamp):
-    delta=timestamp - datetime.fromtimestamp(0)
+    delta = timestamp.astimezone(utc) - datetime.fromtimestamp(0, utc)
     return ((((delta.days * 24 * 60 * 60) + delta.seconds) * 1000000) + delta.microseconds) * 1000
+
+# Convert nanoseconds since epoch to datetime
+def nanoseconds_since_epoch_to_datetime(nanoseconds):
+    return datetime.fromtimestamp(int(nanoseconds * 0.000000001), utc)
 
 #Convert View
 @bp.route("/convert/<int:nanoseconds>/<unit>")
@@ -26,6 +31,7 @@ def convert_nanoseconds(nanoseconds, unit):
     elif unit == "milliseconds": return str(int(nanoseconds * 0.000001))
     elif unit == "seconds": return str(int(nanoseconds * 0.000000001))
     elif unit == "datetime": return datetime.fromtimestamp(int(nanoseconds * 0.000000001)).strftime("%Y-%m-%d %H:%M:%S")
+    elif unit == "datetimeutc": return datetime.fromtimestamp(int(nanoseconds * 0.000000001), utc).strftime("%Y-%m-%d %H:%M:%S")
     raise Exception("Unsupported unit")
 
 #Details JSON View
