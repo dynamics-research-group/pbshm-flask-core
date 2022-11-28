@@ -10,7 +10,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         PAGE_SUFFIX=" - PBSHM Flask Core",
         LOGIN_MESSAGE="Welcome to the Dynamics Research Group PBSHM Flask Core, please enter your authentication credentials below.",
-        FOOTER_MESSAGE="PBSHM Flask Core V1.0.2, © Dynamics Research Group 2020",
+        FOOTER_MESSAGE="PBSHM Flask Core V1.0.3, © Dynamics Research Group 2022",
         NAVIGATION={
             "modules":{
                 "Pathfinder": "pathfinder.population_list"
