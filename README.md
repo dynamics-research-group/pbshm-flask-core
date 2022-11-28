@@ -10,10 +10,17 @@ pip install -r requirements.txt
 ```
 
 ## Setup
-Set the Flask application path and environment:
+Set the Flask application path and environment.
+
+For Linux/Mac:
+```
+export FLASK_APP=pbshm
+export FLASK_DEBUG=1
+```
+For Windows:
 ```
 set FLASK_APP=pbshm
-set FLASK_ENV=development
+set FLASK_DEBUG=1
 ```
 
 Configure settings and initialise the database with a new root user:

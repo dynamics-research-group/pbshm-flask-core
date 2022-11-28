@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask
 
 def create_app(test_config=None):
@@ -16,7 +17,7 @@ def create_app(test_config=None):
             }
         }
     )
-    app.config.from_json("config.json", silent=True) if test_config is None else app.config.from_mapping(test_config)
+    app.config.from_file("config.json", load=json.load, silent=True) if test_config is None else app.config.from_mapping(test_config)
     
     #Ensure Instance Folder
     try:
