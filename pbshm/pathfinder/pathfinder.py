@@ -185,7 +185,7 @@ def population_browse(population):
             fig = figure(
                 tools="pan,box_zoom,reset,save",
                 output_backend="webgl",
-                plot_height=375,
+                height=375,
                 sizing_mode="scale_width",
                 title="Population: {population} Structures: {structures} Channels: {channels}".format(
                     population=population,
