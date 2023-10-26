@@ -1,7 +1,7 @@
 # PBSHM Flask Core
 PBSHM Flask Core is a minimal application built on [Flask](https://github.com/pallets/flask) to enable development of PBSHM Modules that consume [PBSHM Schema](https://github.com/dynamics-research-group/pbshm-schema) data. It was designed to deal with all the basic requirements of a PBSHM system, allowing developers to focus on implementation of PBSHM Modules. 
 
-The application includes an initialisation module to setup the system and database, a permission-based user authentication module and a simple graphing module to allow exploration of data within the database.
+The application includes an initialisation module to setup the system and database, a permission-based user authentication module and a simple graphing module to allow exploration of data within the database. The minimum version of Python required to run the PBSHM Flask Core is version 3.8.10.
 
 ## Installation
 Install the required python packages via pip:
