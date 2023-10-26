@@ -1,7 +1,7 @@
 # PBSHM Flask Core
 PBSHM Flask Core is a minimal application built on [Flask](https://github.com/pallets/flask) to enable development of PBSHM Modules that consume [PBSHM Schema](https://github.com/dynamics-research-group/pbshm-schema) data. It was designed to deal with all the basic requirements of a PBSHM system, allowing developers to focus on implementation of PBSHM Modules. 
 
-The application includes an initialisation module to setup the system and database, a permission-based user authentication module and a simple graphing module to allow exploration of data within the database.
+The application includes an initialisation module to setup the system and database, a permission-based user authentication module and a simple graphing module to allow exploration of data within the database. The minimum version of Python required to run the PBSHM Flask Core is version 3.8.10.
 
 ## Installation
 Install the required python packages via pip:
@@ -34,4 +34,22 @@ The above steps will prompt you for all the required fields to setup the system.
 The application is run via the standard Flask command:
 ```
 flask run
+```
+
+## Tools
+The PBSHM Flask Core comes with a few tools which are available via the mechanic module.
+
+To retrieve all versions of the [PBSHM Schema](https://github.com/dynamics-research-group/pbshm-schema) available for installation, use the following command:
+```
+flask mechanic versions
+``` 
+
+To create a new collection with the latest version of the [PBSHM Schema](https://github.com/dynamics-research-group/pbshm-schema) installed within the collection, use the following command:
+```
+flask mechanic new-structure-collection collection-name
+```
+
+To create a new collection with a specific version of the [PBSHM Schema](https://github.com/dynamics-research-group/pbshm-schema) installed within the collection, use the following command:
+```
+flask mechanic new-structure-collection collection-name --version=v1.0
 ```
