@@ -35,3 +35,21 @@ The application is run via the standard Flask command:
 ```
 flask run
 ```
+
+## Tools
+The PBSHM Flask Core comes with a few tools which are available via the mechanic module.
+
+To retrieve all versions of the [PBSHM Schema](https://github.com/dynamics-research-group/pbshm-schema) available for installation, use the following command:
+```
+flask mechanic versions
+``` 
+
+To create a new collection with the latest version of the [PBSHM Schema](https://github.com/dynamics-research-group/pbshm-schema) installed within the collection, use the following command:
+```
+flask mechanic new-structure-collection collection-name
+```
+
+To create a new collection with a specific version of the [PBSHM Schema](https://github.com/dynamics-research-group/pbshm-schema) installed within the collection, use the following command:
+```
+flask mechanic new-structure-collection collection-name --version=v1.0
+```
