@@ -5,6 +5,7 @@ from datetime import datetime
 from pytz import utc
 from bokeh import colors
 from bokeh.plotting import figure
+from bokeh.models import CustomJSTickFormatter
 from bokeh.embed import components
 from random import randint
 
@@ -166,19 +167,19 @@ def population_browse(population):
                         for key in channel["value"]:
                             name = "{structure_name} - {channel_name} ({key})".format(structure_name=document["name"], channel_name=channel["name"], key=key)
                             if name in document_x:
-                                document_x[name].append(document["timestamp"])
+                                document_x[name].append(nanoseconds_since_epoch_to_datetime(document["timestamp"]))
                                 document_y[name].append(channel["value"][key])
                             else:
-                                document_x[name] = [document["timestamp"]]
+                                document_x[name] = [nanoseconds_since_epoch_to_datetime(document["timestamp"])]
                                 document_y[name] = [channel["value"][key]]
                                 document_color[name] = colors.named.__all__[randint(0, len(colors.named.__all__) - 1)]
                     elif type(channel["value"]) == int or type(channel["value"]) == float:
                         name = "{structure_name} - {channel_name}".format(structure_name=document["name"], channel_name=channel["name"])
                         if name in document_x:
-                            document_x[name].append(document["timestamp"])
+                            document_x[name].append(nanoseconds_since_epoch_to_datetime(document["timestamp"]))
                             document_y[name].append(channel["value"])
                         else:
-                            document_x[name] = [document["timestamp"]]
+                            document_x[name] = [nanoseconds_since_epoch_to_datetime(document["timestamp"])]
                             document_y[name] = [channel["value"]]
                             document_color[name] = colors.named.__all__[randint(0, len(colors.named.__all__) - 1)]
             #Create figure
@@ -192,12 +193,22 @@ def population_browse(population):
                     structures=', '.join(structures) if structures else "All",
                     channels=', '.join(channels) if channels else "All"
                 ),
-                x_axis_label="Time"
+                x_axis_label="Time",
+                x_axis_type="datetime"
             )
             fig.toolbar.logo=None
             fig.toolbar.autohide=True
             for line in document_x:
                 fig.line(document_x[line], document_y[line], line_color=document_color[line], legend_label=line)
+
+            fig.xaxis.formatter = CustomJSTickFormatter(code="""
+                function pad(n) { return n < 10 ? '0' + n : n; }
+                var date = new Date(tick);
+                var formattedDate = pad(date.getDate()) + '/' + pad(date.getMonth() + 1) + '/' + date.getFullYear();
+                var formattedTime = pad(date.getHours()) + ':' + pad(date.getMinutes()) + ':' + pad(date.getSeconds()) + '.' + date.getMilliseconds();
+                return formattedDate + ' ' + formattedTime;
+            """)
+            
             js, html=components(fig)
     #Render Template
     return render_template("browse.html", error=error, population=population, populations=populations, structures=structures, channels=channels, scripts=js, figure=html)
