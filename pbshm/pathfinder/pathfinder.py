@@ -5,6 +5,7 @@ from datetime import datetime
 from pytz import utc
 from bokeh import colors
 from bokeh.plotting import figure
+from bokeh.models import CustomJSTickFormatter, BasicTicker
 from bokeh.embed import components
 from random import randint
 
@@ -140,8 +141,8 @@ def population_browse(population):
         #Process request if no errors
         if error is None:
             #Create Match and Project aggregate steps
-            startTimestamp = datetime_to_nanoseconds_since_epoch(datetime(startDateParts[0], startDateParts[1], startDateParts[2], startTimeParts[0], startTimeParts[1]))
-            endTimestamp = datetime_to_nanoseconds_since_epoch(datetime(endDateParts[0], endDateParts[1], endDateParts[2], endTimeParts[0], endTimeParts[1]))
+            startTimestamp = datetime_to_nanoseconds_since_epoch(datetime(startDateParts[0], startDateParts[1], startDateParts[2], startTimeParts[0], startTimeParts[1], 0, 0))
+            endTimestamp = datetime_to_nanoseconds_since_epoch(datetime(endDateParts[0], endDateParts[1], endDateParts[2], endTimeParts[0], endTimeParts[1], 59, 999999))
             match = {
                 "population":population,
                 "timestamp":{"$gte":startTimestamp, "$lte":endTimestamp}
@@ -192,12 +193,29 @@ def population_browse(population):
                     structures=', '.join(structures) if structures else "All",
                     channels=', '.join(channels) if channels else "All"
                 ),
-                x_axis_label="Time"
+                x_axis_label="Time",
             )
             fig.toolbar.logo=None
             fig.toolbar.autohide=True
             for line in document_x:
                 fig.line(document_x[line], document_y[line], line_color=document_color[line], legend_label=line)
+
+            fig.xaxis.formatter = CustomJSTickFormatter(code="""
+                //DateTime Utilities
+                function pad(number, padding) { return number.toString().padStart(padding, '0'); }
+                function convertNanoseconds(nanoseconds) {
+                    const milliseconds = Math.floor(nanoseconds / 1e6);
+                    const remainderNanoseconds = nanoseconds - (milliseconds * 1e6);
+                    return { milliseconds, remainderNanoseconds };
+                }
+                //Process Current Tick
+                const {milliseconds, remainderNanoseconds} = convertNanoseconds(tick);         
+                var date = new Date(milliseconds);
+                var formattedSubSeconds = ((remainderNanoseconds > 0) ? "." + pad(date.getMilliseconds(), 3) + remainderNanoseconds.toString().padStart(6, '0') : (date.getMilliseconds() > 0) ? "." + pad(date.getMilliseconds(), 3) : '');
+                return pad(date.getDate(), 2) + '/' + pad(date.getMonth() + 1, 2) + '/' + date.getFullYear() + " " + pad(date.getHours(), 2) + ':' + pad(date.getMinutes(), 2) + ':' + pad(date.getSeconds(), 2) + formattedSubSeconds;
+            """)
+            fig.xaxis.major_label_orientation = 3.14159264 / 2
+            fig.xaxis.ticker = BasicTicker(desired_num_ticks=15)
             js, html=components(fig)
     #Render Template
     return render_template("browse.html", error=error, population=population, populations=populations, structures=structures, channels=channels, scripts=js, figure=html)
