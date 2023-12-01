@@ -201,18 +201,18 @@ def population_browse(population):
                 fig.line(document_x[line], document_y[line], line_color=document_color[line], legend_label=line)
 
             fig.xaxis.formatter = CustomJSTickFormatter(code="""
+                //Methods for converting time
                 function pad(number, padding) { return number.toString().padStart(padding, '0'); }
                 function convertNanoseconds(nanoseconds) {
                     const milliseconds = Math.floor(nanoseconds / 1e6);
                     const remainderNanoseconds = nanoseconds - (milliseconds * 1e6);
                     return { milliseconds, remainderNanoseconds };
                 }
-                const {milliseconds, remainderNanoseconds} = convertNanoseconds(tick)
+                //Process Current Tick
+                const {milliseconds, remainderNanoseconds} = convertNanoseconds(tick);         
                 var date = new Date(milliseconds);
-                var formattedDate = pad(date.getDate(), 2) + '/' + pad(date.getMonth() + 1, 2) + '/' + date.getFullYear();
-                var formattedTime = pad(date.getHours(), 2) + ':' + pad(date.getMinutes(), 2) + ':' + pad(date.getSeconds(), 2) + '.' + pad(date.getMilliseconds(), 3);
-
-                return formattedTime + remainderNanoseconds.toString().padStart(6, '0') +' ' + formattedDate;
+                var formattedSubSeconds = ((remainderNanoseconds > 0) ? "." + pad(date.getMilliseconds(), 3) + remainderNanoseconds.toString().padStart(6, '0') : (date.getMilliseconds() > 0) ? "." + pad(date.getMilliseconds(), 3) : '')
+                return pad(date.getDate(), 2) + '/' + pad(date.getMonth() + 1, 2) + '/' + date.getFullYear() + " " + pad(date.getHours(), 2) + ':' + pad(date.getMinutes(), 2) + ':' + pad(date.getSeconds(), 2) + formattedSubSeconds;
             """)
             fig.xaxis.major_label_orientation = 3.14159264 / 2
             fig.xaxis.ticker = BasicTicker(desired_num_ticks=15)
