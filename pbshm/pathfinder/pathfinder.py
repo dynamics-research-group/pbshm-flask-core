@@ -141,8 +141,8 @@ def population_browse(population):
         #Process request if no errors
         if error is None:
             #Create Match and Project aggregate steps
-            startTimestamp = datetime_to_nanoseconds_since_epoch(datetime(startDateParts[0], startDateParts[1], startDateParts[2], startTimeParts[0], startTimeParts[1]))
-            endTimestamp = datetime_to_nanoseconds_since_epoch(datetime(endDateParts[0], endDateParts[1], endDateParts[2], endTimeParts[0], endTimeParts[1]))
+            startTimestamp = datetime_to_nanoseconds_since_epoch(datetime(startDateParts[0], startDateParts[1], startDateParts[2], startTimeParts[0], startTimeParts[1], 0, 0))
+            endTimestamp = datetime_to_nanoseconds_since_epoch(datetime(endDateParts[0], endDateParts[1], endDateParts[2], endTimeParts[0], endTimeParts[1], 59, 999999))
             match = {
                 "population":population,
                 "timestamp":{"$gte":startTimestamp, "$lte":endTimestamp}
