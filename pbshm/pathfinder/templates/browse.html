@@ -28,22 +28,29 @@
                 var json = JSON.parse(this.responseText);
                 if (json.name.length == 0) $("#request-error").text("No population details found").parent().removeClass("d-none");
                 else {
-                    //End Date
+                    //Start Date
                     var timestampConvertEndpoint = '{{ url_for("pathfinder.convert_nanoseconds", nanoseconds=0, unit="milliseconds") }}';
-                    var timestampConvertHttpRequest = new XMLHttpRequest();
-                    timestampConvertHttpRequest.onreadystatechange = function () {
+                    var startDateTimestampConvertHttpRequest = new XMLHttpRequest();
+                    startDateTimestampConvertHttpRequest.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var date = new Date(parseInt(this.responseText));
+                            $("input[name='start-date']").val(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0"));
+                            $("input[name='start-time']").val(String(date.getHours()).padStart(2, '0') + ":" + String(date.getMinutes()).padStart(2, '0'));
+                        }
+                    }
+                    startDateTimestampConvertHttpRequest.open("GET", timestampConvertEndpoint.replace("0", json.start), true);
+                    startDateTimestampConvertHttpRequest.send();
+                    //End Date
+                    var endDateTimestampConvertHttpRequest = new XMLHttpRequest();
+                    endDateTimestampConvertHttpRequest.onreadystatechange = function () {
                         if (this.readyState == 4 && this.status == 200) {
                             var date = new Date(parseInt(this.responseText));
                             $("input[name='end-date']").val(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0"));
-                            $("input[name='end-time']").val(date.getHours() + ":" + date.getMinutes());
-                            date.setDate(date.getDate() - 14);
-                            date.setSeconds(date.getSeconds() + 1);
-                            $("input[name='start-date']").val(date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0"));
-                            $("input[name='start-time']").val(date.getHours() + ":" + date.getMinutes());
+                            $("input[name='end-time']").val(String(date.getHours()).padStart(2, '0') + ":" + String(date.getMinutes()).padStart(2, '0'));
                         }
                     }
-                    timestampConvertHttpRequest.open("GET", timestampConvertEndpoint.replace("0", json.end), true);
-                    timestampConvertHttpRequest.send()
+                    endDateTimestampConvertHttpRequest.open("GET", timestampConvertEndpoint.replace("0", json.end), true);
+                    endDateTimestampConvertHttpRequest.send();
                     //Structures
                     var selectedStructures = {{ structures|safe }};
                     var sortedStructures = json.structures.sort();
