@@ -201,7 +201,7 @@ def population_browse(population):
                 fig.line(document_x[line], document_y[line], line_color=document_color[line], legend_label=line)
 
             fig.xaxis.formatter = CustomJSTickFormatter(code="""
-                //Methods for converting time
+                //DateTime Utilities
                 function pad(number, padding) { return number.toString().padStart(padding, '0'); }
                 function convertNanoseconds(nanoseconds) {
                     const milliseconds = Math.floor(nanoseconds / 1e6);
@@ -211,7 +211,7 @@ def population_browse(population):
                 //Process Current Tick
                 const {milliseconds, remainderNanoseconds} = convertNanoseconds(tick);         
                 var date = new Date(milliseconds);
-                var formattedSubSeconds = ((remainderNanoseconds > 0) ? "." + pad(date.getMilliseconds(), 3) + remainderNanoseconds.toString().padStart(6, '0') : (date.getMilliseconds() > 0) ? "." + pad(date.getMilliseconds(), 3) : '')
+                var formattedSubSeconds = ((remainderNanoseconds > 0) ? "." + pad(date.getMilliseconds(), 3) + remainderNanoseconds.toString().padStart(6, '0') : (date.getMilliseconds() > 0) ? "." + pad(date.getMilliseconds(), 3) : '');
                 return pad(date.getDate(), 2) + '/' + pad(date.getMonth() + 1, 2) + '/' + date.getFullYear() + " " + pad(date.getHours(), 2) + ':' + pad(date.getMinutes(), 2) + ':' + pad(date.getSeconds(), 2) + formattedSubSeconds;
             """)
             fig.xaxis.major_label_orientation = 3.14159264 / 2
