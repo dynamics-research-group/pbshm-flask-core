@@ -3,6 +3,5 @@ pbshm/authentication/
 pbshm/initialisation/
 pbshm/mechanic/
 pbshm/pathfinder/
-pbshm/static/
-pbshm/templates/
+pbshm/layout/
 pbshm/db.py

@@ -1,0 +1,36 @@
+name: PyPI Publish
+on:
+    push:
+        branches:
+            - main
+jobs:
+    build:
+        name: Build distribution files
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v4
+              with:
+                python-version: "3.x"
+            - run: python3 -m pip install build --user
+            - run: python3 -m build
+            - uses: actions/upload-artifact@v3
+              with:
+                name: pypi-package
+                path: dist/
+    publish:
+        name: Publish to PyPI
+        needs:
+            - build
+        runs-on: ubuntu-latest
+        environment:
+            name: release
+            url: https://pypi.org/p/pbshm-core
+        permissions:
+            id-token: write
+        steps:
+            - uses: actions/download-artifact@v3
+              with:
+                name: pypi-package
+                path: dist/
+            - uses: pypa/gh-action-pypi-publish@release/v1

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pbshm-core"
+version = "1.0.5"
+authors = [
+    { name = "Dan Brennan", email = "d.s.brennan@sheffield.ac.uk" }
+]
+description = "PBSHM Core Library"
+readme = "README.md"
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3",
+    "Framework :: Flask"
+]
+requires-python = ">=3.8.10"
+dependencies = [
+    "Flask == 2.3.2",
+    "Werkzeug == 2.3.3",
+    "pymongo == 4.3.3",
+    "bokeh == 3.0.2",
+    "pytz == 2022.6"
+]
+
+[project.urls]
+homepage = "https://github.com/dynamics-research-group/pbshm-flask-core"
+
+[tool.setuptools.packages.find]
+exclude = ["instance"]
