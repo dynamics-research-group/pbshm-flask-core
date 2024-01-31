@@ -24,3 +24,6 @@ dependencies = [
     "bokeh == 3.0.2",
     "pytz == 2022.6"
 ]
+
+[tool.setuptools.packages.find]
+exclude = ["instance"]
