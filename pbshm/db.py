@@ -13,8 +13,8 @@ def user_collection():
         g.user_collection = db_connect()[current_app.config["USER_COLLECTION"]]
     return g.user_collection
 
-#Structure Collection
-def structure_collection():
-    if "structure_collection" not in g:
-        g.structure_collection = db_connect()[current_app.config["STRUCTURE_COLLECTION"]]
-    return g.structure_collection
+#Default Collection
+def default_collection():
+    if "default_collection" not in g:
+        g.default_collection = db_connect()[current_app.config["DEFAULT_COLLECTION"]]
+    return g.default_collection
