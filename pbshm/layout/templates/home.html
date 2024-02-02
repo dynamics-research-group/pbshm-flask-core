@@ -3,13 +3,16 @@
 {% block content %}
     <div class="alert alert-success" role="alert">
         <h4 class="alert-heading">PBSHM Core successfully installed</h4>
-        <p>Congratulation, you have successfully configured and installed PBSHM Core.</p>
+        <div class="d-flex flex-row-reverse align-items-center">
+            <a class="btn btn-outline-info mt-n3 ml-3" href="{{ url_for('layout.diagnostics') }}">System Diagnostics</a>
+            <p class="flex-fill">Congratulation, you have successfully configured and installed PBSHM Core.</p>
+        </div>
         <hr>
         <p>PBSHM Core is a minimal application built on Flask to enable development of PBSHM modules that consume <a href="https://github.com/dynamics-research-group/pbshm-schema">PBSHM Schema</a> data. It was designed to deal with all the basic requirements of a PBSHM system, allowing developers to focus on implementation of PBSHM modules. For more information on how to develop your own PBSHM module and include it within your core installation, please see <a href="https://github.com/dynamics-research-group/pbshm-module-template">here</a>.</p>
     </div>
     <h5>Tools</h5>
     <hr>
-    The PBSHM Core comes with a few tools which are available via the mechanic and timekeeper modules. The mechanic module enables easy interaction with the PBSHM Schema and your local database. The timekeeper module enables conversions from native python datetime object into the UTC nanoseconds since epoch time stored within the database.
+    <p>The PBSHM Core comes with a few tools which are available via the mechanic and timekeeper modules. The mechanic module enables easy interaction with the PBSHM Schema and your local database. The timekeeper module enables conversions from native python datetime object into the UTC nanoseconds since epoch time stored within the database.</p>
 
     <p class="mb-0 mt-3">To retrieve all versions of the PBSHM Schema available for installation, use the following cli command:</p>
     <code>flask mechanic versions</code>
