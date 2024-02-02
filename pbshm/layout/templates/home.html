@@ -1,0 +1,47 @@
+{% extends 'portal.html' %}
+{% block title %}Welcome {{ name }}{% endblock %}
+{% block content %}
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">PBSHM Core successfully installed</h4>
+        <div class="d-flex flex-row-reverse align-items-center">
+            <a class="btn btn-outline-info mt-n3 ml-3" href="{{ url_for('layout.diagnostics') }}">System Diagnostics</a>
+            <p class="flex-fill">Congratulation, you have successfully configured and installed PBSHM Core.</p>
+        </div>
+        <hr>
+        <p>PBSHM Core is a minimal application built on Flask to enable development of PBSHM modules that consume <a href="https://github.com/dynamics-research-group/pbshm-schema">PBSHM Schema</a> data. It was designed to deal with all the basic requirements of a PBSHM system, allowing developers to focus on implementation of PBSHM modules. For more information on how to develop your own PBSHM module and include it within your core installation, please see <a href="https://github.com/dynamics-research-group/pbshm-module-template">here</a>.</p>
+    </div>
+    <h5>Tools</h5>
+    <hr>
+    <p>The PBSHM Core comes with a few tools which are available via the mechanic and timekeeper modules. The mechanic module enables easy interaction with the PBSHM Schema and your local database. The timekeeper module enables conversions from native python datetime object into the UTC nanoseconds since epoch time stored within the database.</p>
+
+    <p class="mb-0 mt-3">To retrieve all versions of the PBSHM Schema available for installation, use the following cli command:</p>
+    <code>flask mechanic versions</code>
+    
+    <p class="mb-0 mt-3">To create a new collection with the latest version of the PBSHM Schema installed within the collection, use the following command:</p>
+    <code>flask mechanic new-structure-collection collection-name</code>
+    
+    <p class="mb-0 mt-3">To create a new collection with a specific version of the PBSHM Schema installed within the collection, use the following command:</p>
+    <code>flask mechanic new-structure-collection collection-name --version=v1.0</code>
+
+    <p class="mb-0 mt-3">To convert a python <var>datetime</var> object into UTC nanoseconds since epoch, use the following code:</p>
+    <pre class="mb-0"><code>
+from datetime import datetime
+from pbshm.timekeeper.timekeeper import datetime_to_nanoseconds_since_epoch
+
+<var>now</var> = datetime.now()
+<var>nanoseconds</var> = datetime_to_nanoseconds_since_epoch(<var>now</var>)
+    </code></pre>
+
+    <p class="mb-0 mt-3">To convert a UTC nanoseconds since epoch into a native python <var>datetime</var> object, use the following code:</p>
+    <pre class="mb-0"><code>
+from pbshm.timekeeper.timekeeper import nanoseconds_since_epoch_to_datetime
+
+<var>nanoseconds</var> = 1706884924912888000
+<var>date_time</var> = nanoseconds_since_epoch_to_datetime(<var>nanoseconds</var>)
+    </code></pre>
+
+    <h5>Bug reporting</h5>
+    <hr>
+    <p>If you encounter any issues/bugs with the system or the instructions above, please raise an issue through the <a href="https://github.com/dynamics-research-group/pbshm-flask-core/issues">issues system</a> on GitHub.</p>
+    
+{% endblock %}

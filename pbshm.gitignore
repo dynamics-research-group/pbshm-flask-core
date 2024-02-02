@@ -1,7 +1,0 @@
-# Ignore PBSHM Flask Core Folder/Files
-pbshm/authentication/
-pbshm/initialisation/
-pbshm/mechanic/
-pbshm/pathfinder/
-pbshm/layout/
-pbshm/db.py

@@ -22,11 +22,11 @@ bp.cli.chain = True
 @click.option("--database-password", "password", prompt="Database password", hide_input=True, confirmation_prompt=True)
 @click.option("--pbshm-database", prompt="PBSHM database", default="drg-pbshm")
 @click.option("--user-collection", prompt="Users collection", default="users")
-@click.option("--structure-collection", prompt="Structures collection", default="structures")
+@click.option("--default-collection", prompt="Default data collection", default="structures")
 @click.option("--secret-key", prompt="Secret Key", default="")
 def initialise_sub_system_config(
     hostname, port, authentication_database, username, password,
-    pbshm_database, user_collection, structure_collection, secret_key
+    pbshm_database, user_collection, default_collection, secret_key
 ):
     #Create Config Dictionary
     config = {
@@ -36,7 +36,7 @@ def initialise_sub_system_config(
         ),
         "PBSHM_DATABASE": pbshm_database,
         "USER_COLLECTION": user_collection,
-        "STRUCTURE_COLLECTION": structure_collection,
+        "DEFAULT_COLLECTION": default_collection,
         "SECRET_KEY": str(urandom(32)) if not secret_key else secret_key
     }
     #Write Config File
@@ -49,7 +49,7 @@ def initialise_sub_system_config(
 @bp.cli.command("db")
 def initialise_sub_system_db():
     #Create Structure Collection
-    create_new_structure_collection(current_app.config["STRUCTURE_COLLECTION"])
+    create_new_structure_collection(current_app.config["DEFAULT_COLLECTION"])
     #Load Schema File
     with current_app.open_resource("initialisation/user-schema.json") as file:
         schema = json.load(file)
