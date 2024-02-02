@@ -10,10 +10,10 @@ def create_app(test_config=None):
     app.config.from_mapping(
         PAGE_SUFFIX=" - PBSHM Core",
         LOGIN_MESSAGE="Welcome to the Dynamics Research Group PBSHM Core, please enter your authentication credentials below.",
-        FOOTER_MESSAGE="PBSHM Core, © Dynamics Research Group 2022",
+        FOOTER_MESSAGE="PBSHM Core © Dynamics Research Group 2022 - 2024",
         NAVIGATION={
             "modules":{
-                "Pathfinder": "pathfinder.population_list"
+                "Home": "layout.home"
             }
         }
     )
@@ -38,12 +38,9 @@ def create_app(test_config=None):
     ## Authentication
     from pbshm.authentication import authentication
     app.register_blueprint(authentication.bp, url_prefix="/authentication")
-    ## Pathfinder
-    from pbshm.pathfinder import pathfinder
-    app.register_blueprint(pathfinder.bp, url_prefix="/pathfinder")
-
+    
     #Set Root Page
-    app.add_url_rule("/", endpoint="pathfinder.population_list")
+    app.add_url_rule("/", endpoint="layout.home")
 
     #Return App
     return app
