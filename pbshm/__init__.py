@@ -35,6 +35,9 @@ def create_app(test_config=None):
     ## Layout
     from pbshm.layout import layout
     app.register_blueprint(layout.bp, url_prefix="/layout")
+    ## Timekeeper
+    from pbshm.timekeeper import timekeeper
+    app.register_blueprint(timekeeper.bp, url_prefix="/timekeeper")
     ## Authentication
     from pbshm.authentication import authentication
     app.register_blueprint(authentication.bp, url_prefix="/authentication")
