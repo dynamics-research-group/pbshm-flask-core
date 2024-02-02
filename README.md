@@ -39,6 +39,34 @@ The application is run via the standard Flask command:
 flask run
 ```
 
+## Accessing data
+The PBSHM Core operates under the premise of data silos: where each realm of confidential data has a corresponding silo (a *structure collection*) where it's data resides. A user will always have access to at least one *structure collection* (the *default collection*), but there may be multiple *structure collection*s available to the user.
+
+The code below shows how to access data in the *default collection* using a [MongoDB Aggregation Pipeline](https://www.mongodb.com/docs/manual/aggregation/#aggregation-pipelines) on the `default_collection`:
+
+```python
+from pbshm.db import default_collection
+
+populations = {}
+for document in default_collection().aggregate([
+    {"$project":{
+        "_id":1,
+        "name":1,
+        "population":1
+    }},
+    {"$group":{
+        "_id":"$population",
+        "structures":{"$addToSet":"$name"}
+    }},
+    {"$project":{
+        "_id":0,
+        "population":"$_id",
+        "structures":1
+    }}
+]):
+    populations[document["population"]] = document["structures"]
+```
+
 ## Tools
 The PBSHM Core comes with a few tools which are available via the mechanic and timekeeper modules. The mechanic module enables easy interaction with the PBSHM Schema and your local database. The timekeeper module enables conversions from native python `datetime` objects into the `timestamp` format stored within the PBSHM Schema.
 
