@@ -27,19 +27,19 @@ def create_app(test_config=None):
 
     #Add Blueprints
     ## Initialisation
-    from pbshm.initialisation import initialisation
+    from pbshm import initialisation
     app.register_blueprint(initialisation.bp)
     ## Mechanic
-    from pbshm.mechanic import mechanic
+    from pbshm import mechanic
     app.register_blueprint(mechanic.bp)
     ## Layout
-    from pbshm.layout import layout
+    from pbshm import layout
     app.register_blueprint(layout.bp, url_prefix="/layout")
     ## Timekeeper
-    from pbshm.timekeeper import timekeeper
+    from pbshm import timekeeper
     app.register_blueprint(timekeeper.bp, url_prefix="/timekeeper")
     ## Authentication
-    from pbshm.authentication import authentication
+    from pbshm import authentication
     app.register_blueprint(authentication.bp, url_prefix="/authentication")
     
     #Set Root Page
