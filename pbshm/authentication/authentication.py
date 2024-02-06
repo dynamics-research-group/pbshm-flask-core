@@ -1,7 +1,9 @@
-from flask import Blueprint, current_app, g, render_template, request, session, redirect, url_for
-from werkzeug.security import check_password_hash
 from functools import wraps
+
 from bson import ObjectId
+from flask import Blueprint, g, render_template, request, session, redirect, url_for
+from werkzeug.security import check_password_hash
+
 from pbshm.db import user_collection
 
 #Create the Authentication Blueprint

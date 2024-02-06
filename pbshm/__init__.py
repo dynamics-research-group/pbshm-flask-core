@@ -1,6 +1,9 @@
 import os
 import json
+
 from flask import Flask
+
+from pbshm import authentication, initialisation, layout, mechanic, timekeeper
 
 def create_app(test_config=None):
     #Create Flask App
@@ -26,21 +29,11 @@ def create_app(test_config=None):
         pass
 
     #Add Blueprints
-    ## Initialisation
-    from pbshm.initialisation import initialisation
-    app.register_blueprint(initialisation.bp)
-    ## Mechanic
-    from pbshm.mechanic import mechanic
-    app.register_blueprint(mechanic.bp)
-    ## Layout
-    from pbshm.layout import layout
-    app.register_blueprint(layout.bp, url_prefix="/layout")
-    ## Timekeeper
-    from pbshm.timekeeper import timekeeper
-    app.register_blueprint(timekeeper.bp, url_prefix="/timekeeper")
-    ## Authentication
-    from pbshm.authentication import authentication
-    app.register_blueprint(authentication.bp, url_prefix="/authentication")
+    app.register_blueprint(initialisation.bp) ## Initialisation
+    app.register_blueprint(mechanic.bp) ## Mechanic
+    app.register_blueprint(layout.bp, url_prefix="/layout") ## Layout
+    app.register_blueprint(timekeeper.bp, url_prefix="/timekeeper") ## Timekeeper
+    app.register_blueprint(authentication.bp, url_prefix="/authentication") ## Authentication
     
     #Set Root Page
     app.add_url_rule("/", endpoint="layout.home")

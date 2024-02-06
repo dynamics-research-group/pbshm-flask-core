@@ -1,6 +1,7 @@
+from datetime import datetime
+
 from flask import Blueprint
 from pytz import utc
-from datetime import datetime
 
 #Create the timekeeper Blueprint
 bp = Blueprint("timekeeper", __name__)

@@ -88,7 +88,7 @@ flask mechanic new-structure-collection collection-name --version=v1.0
 To convert a python `datetime` object into UTC nanoseconds since epoch, use the following code:
 ```python
 from datetime import datetime
-from pbshm.timekeeper.timekeeper import datetime_to_nanoseconds_since_epoch
+from pbshm.timekeeper import datetime_to_nanoseconds_since_epoch
 
 now = datetime.now()
 nanoseconds = datetime_to_nanoseconds_since_epoch(now)
@@ -96,7 +96,7 @@ nanoseconds = datetime_to_nanoseconds_since_epoch(now)
 
 To convert a UTC nanoseconds since epoch into a native python `datetime` object, use the following code:
 ```python
-from pbshm.timekeeper.timekeeper import nanoseconds_since_epoch_to_datetime
+from pbshm.timekeeper import nanoseconds_since_epoch_to_datetime
 
 nanoseconds = 1706884924912888000
 date_time = nanoseconds_since_epoch_to_datetime(nanoseconds)

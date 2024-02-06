@@ -26,7 +26,7 @@
     <p class="mb-0 mt-3">To convert a python <var>datetime</var> object into UTC nanoseconds since epoch, use the following code:</p>
     <pre class="mb-0"><code>
 from datetime import datetime
-from pbshm.timekeeper.timekeeper import datetime_to_nanoseconds_since_epoch
+from pbshm.timekeeper import datetime_to_nanoseconds_since_epoch
 
 <var>now</var> = datetime.now()
 <var>nanoseconds</var> = datetime_to_nanoseconds_since_epoch(<var>now</var>)
@@ -34,7 +34,7 @@ from pbshm.timekeeper.timekeeper import datetime_to_nanoseconds_since_epoch
 
     <p class="mb-0 mt-3">To convert a UTC nanoseconds since epoch into a native python <var>datetime</var> object, use the following code:</p>
     <pre class="mb-0"><code>
-from pbshm.timekeeper.timekeeper import nanoseconds_since_epoch_to_datetime
+from pbshm.timekeeper import nanoseconds_since_epoch_to_datetime
 
 <var>nanoseconds</var> = 1706884924912888000
 <var>date_time</var> = nanoseconds_since_epoch_to_datetime(<var>nanoseconds</var>)
