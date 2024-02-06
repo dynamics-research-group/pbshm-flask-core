@@ -1,11 +1,13 @@
-import pymongo
 import json
-import click
 from os import urandom, makedirs
 from os.path import isdir, join
+
+import click
+import pymongo
 from flask import Blueprint, current_app
 from urllib.parse import quote_plus
 from werkzeug.security import generate_password_hash
+
 from pbshm.db import db_connect
 from pbshm.mechanic import create_new_structure_collection
 

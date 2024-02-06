@@ -1,9 +1,11 @@
 import json
+from datetime import datetime
+
 import click
 import pymongo
-from datetime import datetime
-from flask import Blueprint, current_app
+from flask import Blueprint
 from urllib.request import urlopen
+
 from pbshm.db import db_connect
 
 #Constants

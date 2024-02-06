@@ -1,4 +1,5 @@
 from flask import Blueprint, g, render_template, jsonify
+
 from pbshm.authentication import authenticate_request
 from pbshm.db import default_collection
 
