@@ -1,6 +1,6 @@
 import json
 from os import urandom, makedirs
-from os.path import isdir, join
+from os.path import isdir, join, dirname
 
 import click
 import pymongo
@@ -53,7 +53,7 @@ def initialise_sub_system_db():
     #Create Structure Collection
     create_new_structure_collection(current_app.config["DEFAULT_COLLECTION"])
     #Load Schema File
-    with current_app.open_resource("initialisation/user-schema.json") as file:
+    with open(join(dirname(__file__), "user-schema.json"), 'r') as file:
         schema = json.load(file)
     #Create User Collection
     db = db_connect()
