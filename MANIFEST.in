@@ -1,4 +1,4 @@
-global-include *.html
-global-include *.css
+recursive-include pbshm *.html
+recursive-include pbshm *.css
 include pbshm/initialisation/*.json
 include pbshm/layout/static/*.png
