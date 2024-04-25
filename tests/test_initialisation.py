@@ -64,7 +64,10 @@ class TestInitialiseSubSystemConfig:
         with open("./instance/config.json") as f:
             config = json.load(f)
         db = pymongo.MongoClient(config["MONGODB_URI"])[config["PBSHM_DATABASE"]]
-        assert db.list_collection_names()
+
+        db.create_collection("unittest_throwaway")
+        assert len(db.list_collection_names()) > 0
+        assert "unittest_throwaway" in db.list_collection_names()
     
     @pytest.mark.dependency(depends=["TestInitialiseSubSystemConfig::test_cli_call"])
     def test_incorrect_credentials_fail(self):
