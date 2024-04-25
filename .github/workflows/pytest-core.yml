@@ -10,7 +10,7 @@ jobs:
     env:
       MONGODB_HOST: localhost
       MONGODB_USERNAME: pytestAdmin
-      MONGODB_PASSWORD: 1234
+      MONGODB_PASSWORD: 8gFmJLPLQS
       MONGODB_PORT: 27017
     strategy:
       matrix:
