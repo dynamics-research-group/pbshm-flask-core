@@ -28,4 +28,4 @@ dependencies = [
 homepage = "https://github.com/dynamics-research-group/pbshm-flask-core"
 
 [tool.setuptools.packages.find]
-exclude = ["instance"]
+exclude = ["instance", "tests"]
