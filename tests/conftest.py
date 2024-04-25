@@ -52,6 +52,9 @@ def pytest_sessionstart():
     db = client[os.environ.get("MONGODB_DATA_DB")]
     db[os.environ.get("MONGODB_STRUCTURE_COLLECTION")].drop()
     db[os.environ.get("MONGODB_USERS_COLLECTION")].drop()
+    for collection_name in db.list_collection_names():
+        if "unittest_" in collection_name:
+            db[collection_name].drop()
 
 def pytest_collection_modifyitems(items):
     """
