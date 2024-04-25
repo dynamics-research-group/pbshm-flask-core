@@ -16,7 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Framework :: Flask"
 ]
-requires-python = ">=3.8.10"
+requires-python = ">=3.9.18"
 dependencies = [
     "Flask == 2.3.2",
     "Werkzeug == 2.3.3",
