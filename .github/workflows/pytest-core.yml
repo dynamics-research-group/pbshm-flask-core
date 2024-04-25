@@ -1,0 +1,52 @@
+name: Run Core Unit Tests
+on:
+  pull_request:
+    types: [opened, edited, reopened, review_requested]
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      MONGODB_HOST: localhost
+      MONGODB_USERNAME: pytestAdmin
+      MONGODB_PASSWORD: 1234
+      MONGODB_PORT: 27017
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+    services:
+      mongodb:
+        image: mongo
+        env:
+          MONGO_INITDB_ROOT_USERNAME: pytestAdmin
+          MONGO_INITDB_ROOT_PASSWORD: 8gFmJLPLQS
+        ports:
+          - 27017:27017
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Install MongoDB
+        uses: supercharge/mongodb-github-action@1.8.0
+        with:
+          mongodb-version: latest
+      - name: Run Unit Tests Using PyTest
+        env:
+          MONGODB_AUTH_DB: admin
+          MONGODB_DATA_DB: unittest_db
+          MONGODB_USERS_COLLECTION: unittest_users
+          MONGODB_STRUCTURE_COLLECTION: unittest_structures
+          MONGODB_SECRET_KEY: unittest_key
+          PBSHM_USERNAME: user@test.com
+          PBSHM_PASSWORD: 8gFmJLPLQS
+          PBSHM_FORENAME: Test
+          PBSHM_SURNAME: User
+        run: pytest -rsx
