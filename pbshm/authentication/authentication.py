@@ -1,7 +1,8 @@
 from functools import wraps
 
 from bson import ObjectId
-from flask import Blueprint, g, render_template, request, session, redirect, url_for
+from flask import Blueprint, g, render_template, request, session, redirect, url_for, current_app
+from werkzeug.exceptions import Unauthorized
 from werkzeug.security import check_password_hash
 
 from pbshm.db import user_collection
@@ -59,13 +60,23 @@ def authenticate_request(permission=None):
     def view_decorator(view):
         @wraps(view)
         def wrapped(*args, **kwargs):
-            if g.user is None: return redirect(url_for("authentication.login"))
+            if g.user is None: raise Unauthorized(description="Please login to perform this action")
             else:
                 user = user_collection().find_one(
                     { "_id": ObjectId(g.user["_id"]), "enabled": True } if permission is None else { "_id": ObjectId(g.user["_id"]), "enabled": True, "permissions": { "$in": [permission, "root"] } },
                     { "_id": 1 }
                 )
-                if user is None or g.user["_id"] != str(user["_id"]): return redirect(url_for("authentication.login", reason="denied"))
+                if user is None or g.user["_id"] != str(user["_id"]): raise Unauthorized(description="You do not have permission to perform this action")
             return view(*args, **kwargs)
         return wrapped
     return view_decorator
+
+
+def handle_unauthorised_request(e):
+    """
+    Error handler function for 401 HTTP status code.
+    """
+    if current_app.config["TESTING"] == False:
+        return redirect(url_for("authentication.login"))
+    else:
+        return e
