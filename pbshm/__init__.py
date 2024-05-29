@@ -2,6 +2,7 @@ import os
 import json
 
 from flask import Flask
+from werkzeug.exceptions import Unauthorized
 
 from pbshm import authentication, initialisation, layout, mechanic, timekeeper
 
@@ -34,9 +35,12 @@ def create_app(test_config=None):
     app.register_blueprint(layout.bp, url_prefix="/layout") ## Layout
     app.register_blueprint(timekeeper.bp, url_prefix="/timekeeper") ## Timekeeper
     app.register_blueprint(authentication.bp, url_prefix="/authentication") ## Authentication
-    
+
     #Set Root Page
     app.add_url_rule("/", endpoint="layout.home")
+
+    #Register Exceptions
+    app.register_error_handler(Unauthorized, authentication.handle_unauthorised_request)
 
     #Return App
     return app
