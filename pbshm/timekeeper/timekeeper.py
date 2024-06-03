@@ -35,6 +35,5 @@ def convert_nanoseconds(nanoseconds, unit):
     if unit == "microseconds": return str(int(nanoseconds * 0.001))
     elif unit == "milliseconds": return str(int(nanoseconds * 0.000001))
     elif unit == "seconds": return str(int(nanoseconds * 0.000000001))
-    elif unit == "datetime": return datetime.fromtimestamp(int(nanoseconds * 0.000000001)).strftime("%Y-%m-%d %H:%M:%S")
     elif unit == "datetimeutc": return datetime.fromtimestamp(int(nanoseconds * 0.000000001), timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
     raise Exception("Unsupported unit")

@@ -176,12 +176,6 @@ class TestConvertNanoseconds:
         """
         assert convert_nanoseconds(int(1e9), "seconds") == '1'
 
-    def test_datetime(self):
-        """
-        Test correct conversion on known nanosecond value to datetime with no timezone.
-        """
-        assert convert_nanoseconds(814309916000000000, "datetime") == "1995-10-21 22:11:56"
-
     def test_datetimeutc(self):
         """
         Test correct conversion on known nanosecond value to datetime UTC.
