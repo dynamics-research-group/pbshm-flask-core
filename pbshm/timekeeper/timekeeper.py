@@ -15,11 +15,23 @@ def datetime_to_nanoseconds_since_epoch(timestamp: datetime):
 
 # Convert nanoseconds since epoch to datetime
 def nanoseconds_since_epoch_to_datetime(nanoseconds):
-    return datetime.fromtimestamp(int(nanoseconds * 0.000000001), timezone.utc)
+    if isinstance(nanoseconds, int):
+        return datetime.fromtimestamp(int(nanoseconds * 0.000000001), timezone.utc)
+    elif isinstance(nanoseconds, (float, complex)):
+        raise ValueError("Input nanoseconds must be a real-valued integer.")
+    else:
+        raise TypeError("Input nanoseconds must be a real-valued integer.")
 
 #Convert View
 @bp.route("/convert/<int:nanoseconds>/<unit>")
 def convert_nanoseconds(nanoseconds, unit):
+    if isinstance(nanoseconds, int):
+        pass
+    elif isinstance(nanoseconds, (float, complex)):
+        raise ValueError("Input nanoseconds must be a real-valued integer.")
+    else:
+        raise TypeError("Input nanoseconds must be a real-valued integer.")
+    
     if unit == "microseconds": return str(int(nanoseconds * 0.001))
     elif unit == "milliseconds": return str(int(nanoseconds * 0.000001))
     elif unit == "seconds": return str(int(nanoseconds * 0.000000001))
