@@ -6,7 +6,10 @@ from flask import Blueprint
 bp = Blueprint("timekeeper", __name__)
 
 # Convert datetime to nanoseconds since epoch
-def datetime_to_nanoseconds_since_epoch(timestamp):
+def datetime_to_nanoseconds_since_epoch(timestamp: datetime):
+    if timestamp.tzinfo is None:
+        raise ValueError("Timestamp needs timezone info to be unambiguous.")
+    
     delta = timestamp.astimezone(timezone.utc) - datetime.fromtimestamp(0, timezone.utc)
     return ((((delta.days * 24 * 60 * 60) + delta.seconds) * 1000000) + delta.microseconds) * 1000
 
