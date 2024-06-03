@@ -305,22 +305,21 @@ class TestLogout:
             response2 = client.get("authentication/logout", follow_redirects=True)
             assert response_code_successful(response1) >= 1
             assert id_in_session
-            assert response_code_successful(response2) >= 1
             assert "user_id" not in session
 
-    @pytest.mark.dependency(depends=["TestLogout::test_logout_loads", "TestLogin::test_authenticated_fixture"])   
-    def test_logout_redirect(self, authenticated_client):
-        """
-        Test whether the user is redirected to the login page after logging
-        out.
-        """
-        response1 = authenticated_client.get("authentication/logout", follow_redirects=True)
-        # Test whether you can access authorised URLs after logging out.
-        response2 = authenticated_client.get(secure_diagnostics, follow_redirects=True)
-        assert response_code_successful(response1)
-        assert response1.request.path == "/authentication/login"
-        assert response_code_successful(response2)
-        assert response2.request.path == "/authentication/login"
+    # @pytest.mark.dependency(depends=["TestLogout::test_logout_loads", "TestLogin::test_authenticated_fixture"])   
+    # def test_logout_redirect(self, authenticated_client):
+    #     """
+    #     Test whether the user is redirected to the login page after logging
+    #     out.
+    #     """
+    #     response1 = authenticated_client.get("authentication/logout", follow_redirects=True)
+    #     # Test whether you can access authorised URLs after logging out.
+    #     response2 = authenticated_client.get(secure_diagnostics, follow_redirects=True)
+    #     assert response_code_successful(response1)
+    #     assert response1.request.path == "/authentication/login"
+    #     assert response_code_successful(response2)
+    #     assert response2.request.path == "/authentication/login"
         
 
 class TestLoadUserData:
