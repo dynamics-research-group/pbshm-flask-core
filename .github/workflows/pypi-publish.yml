@@ -19,7 +19,7 @@ jobs:
                 python-version: "3.x"
             - run: python3 -m pip install build --user
             - run: python3 -m build
-            - uses: actions/upload-artifact@v3
+            - uses: actions/upload-artifact@v4
               with:
                 name: pypi-package
                 path: dist/
@@ -35,7 +35,7 @@ jobs:
         permissions:
             id-token: write
         steps:
-            - uses: actions/download-artifact@v3
+            - uses: actions/download-artifact@v4
               with:
                 name: pypi-package
                 path: dist/
