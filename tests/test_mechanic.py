@@ -96,6 +96,8 @@ class TestMechanicNewCollection:
     def test_legacy_version_creation(self, runner):
         """
         Check old version of the schema is loaded in to the collection.
+        The schema version 1.0.1 did not have a version tag inside the schema,
+        and this tests leverages that fact.
         """
         test_args = ["mechanic", "new-structure-collection", "unittest_legacy_schema", "--version", "v1.0.1"]
         result = runner.invoke(args=test_args)
@@ -132,7 +134,8 @@ class TestMechanicNewCollection:
     def test_nonexistent_version_blocking(self, runner):
         """
         Check a nonexistent schema version is not installed and cli call
-        results in error.
+        results in error. The first version was 1.0, therefore, anything
+        before this should fail.
         """
         test_args = ["mechanic", "new-structure-collection", "unittest_nonexistent_schema", "--version", "v0.1"]
         result = runner.invoke(args=test_args)

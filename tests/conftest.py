@@ -106,6 +106,8 @@ def runner(app) -> FlaskClient:
 def authenticated_client(client, app) -> FlaskClient:
     """
     Used for creating an authenticated client.
+
+    Authenticated client is set to root by default.
     """
     with app.app_context():
         client.post(
