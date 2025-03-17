@@ -31,8 +31,8 @@ def pytest_sessionstart():
     }
     """
     # Copy the local_test_credentials.json format as outlined in the docstring.
-    if os.path.exists("./tests/local_test_credentials.json"):
-        with open("./tests/local_test_credentials.json") as f:
+    if os.path.exists(os.path.join(os.getcwd(), "tests", "local_test_credentials.json")):
+        with open(os.path.join(os.getcwd(), "tests", "local_test_credentials.json")) as f:
             environment_vars = json.load(f)
 
         for key, val in environment_vars.items():

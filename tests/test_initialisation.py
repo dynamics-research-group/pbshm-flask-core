@@ -38,8 +38,8 @@ class TestInitialiseSubSystemConfig:
         Test if the "init config" command has created an instance folder and a
         config.json file inside.
         """
-        assert os.path.isdir("./instance")
-        assert os.path.isfile("./instance/config.json")
+        assert os.path.isdir(os.path.join(os.getcwd(), "instance"))
+        assert os.path.isfile(os.path.join(os.getcwd(), "instance", "config.json"))
     
     @pytest.mark.dependency(depends=["TestInitialiseSubSystemConfig::test_config_file_exists"])
     def test_config_contents(self):
@@ -47,7 +47,7 @@ class TestInitialiseSubSystemConfig:
         Test that the contents of the config.json file are as expected, given
         command line inputs in TestInitialiseSubSystemConfig::test_cli_call.
         """
-        with open("./instance/config.json") as f:
+        with open(os.path.join(os.getcwd(), "instance", "config.json")) as f:
             config = json.load(f)
         assert config["MONGODB_URI"] == f"mongodb://{os.environ['MONGODB_USERNAME']}:{os.environ['MONGODB_PASSWORD']}@{os.environ['MONGODB_HOST']}:{os.environ['MONGODB_PORT']}/{os.environ['MONGODB_AUTH_DB']}"
         assert config["PBSHM_DATABASE"] == os.environ["MONGODB_DATA_DB"] 
@@ -61,7 +61,7 @@ class TestInitialiseSubSystemConfig:
         Test whether credentials inside config.json are valid and allow access
         to the database. 
         """
-        with open("./instance/config.json") as f:
+        with open(os.path.join(os.getcwd(), "instance", "config.json")) as f:
             config = json.load(f)
         db = pymongo.MongoClient(config["MONGODB_URI"])[config["PBSHM_DATABASE"]]
 
@@ -75,7 +75,7 @@ class TestInitialiseSubSystemConfig:
         Test whether wrong credentials do not work. Essentially testing whether
         authentication is properly set up on the database.
         """
-        with open("./instance/config.json") as f:
+        with open(os.path.join(os.getcwd(), "instance", "config.json")) as f:
             config = json.load(f)
         bad_uri = f"mongodb://notAnAdmin:wrongPassword@{os.environ['MONGODB_HOST']}:{os.environ['MONGODB_PORT']}/{os.environ['MONGODB_AUTH_DB']}"
         db = pymongo.MongoClient(bad_uri)[config["PBSHM_DATABASE"]]
@@ -114,7 +114,7 @@ class TestInitialiseSubSystemDB:
         Tests whether the user_collection has the correct schema.
         """
         user_schema = user_collection().options()["validator"]
-        with open("./pbshm/initialisation/user-schema.json", 'r') as f:
+        with open(os.path.join(os.getcwd(), "pbshm", "initialisation", "user-schema.json"), 'r') as f:
             schema_file = json.load(f)
         assert user_schema["$jsonSchema"] == schema_file
 
