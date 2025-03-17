@@ -1,11 +1,13 @@
+import os
 import json
+
 import pymongo
 
 def get_config():
     """
     For returning the configuration details from the instance folder.
     """
-    with open("./instance/config.json") as f:
+    with open(os.path.join(os.getcwd(), "instance", "config.json")) as f:
         config = json.load(f)
     return config
 

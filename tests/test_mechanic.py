@@ -73,7 +73,7 @@ class TestMechanicNewCollection:
         assert db["unittest_new_collection"].options()["validator"]["$jsonSchema"]["properties"]["version"]["enum"] == [all_schema_versions[0][1:]]  # Assert this is the most recent version.
 
     @pytest.mark.dependency(depends=["TestMechanicNewCollection::test_latest_version_collection_created"])
-    def test_latest_version_same_colection_name_blocked(self, runner):
+    def test_latest_version_same_collection_name_blocked(self, runner):
         """
         Test if a collection is created with a name that already exists, then
         the command fails.
@@ -83,7 +83,7 @@ class TestMechanicNewCollection:
         assert result.exit_code == 1
         assert result.output
 
-    @pytest.mark.dependency(depends=["TestMechanicNewCollection::test_latest_version_same_colection_name_blocked"])
+    @pytest.mark.dependency(depends=["TestMechanicNewCollection::test_latest_version_same_collection_name_blocked"])
     def test_latest_version_same_collection_schema_exists_after_fail(self):
         """
         Ensure that the schema has not been altered upon the failure from the
@@ -96,6 +96,8 @@ class TestMechanicNewCollection:
     def test_legacy_version_creation(self, runner):
         """
         Check old version of the schema is loaded in to the collection.
+        The schema version 1.0.1 did not have a version tag inside the schema,
+        and this tests leverages that fact.
         """
         test_args = ["mechanic", "new-structure-collection", "unittest_legacy_schema", "--version", "v1.0.1"]
         result = runner.invoke(args=test_args)
@@ -104,7 +106,7 @@ class TestMechanicNewCollection:
         assert "version" not in db["unittest_legacy_schema"].options()["validator"]["$jsonSchema"]["properties"]
 
     @pytest.mark.dependency(depends=["TestMechanicNewCollection::test_legacy_version_creation"])
-    def test_legacy_version_same_colection_name_blocked(self, runner):
+    def test_legacy_version_same_collection_name_blocked(self, runner):
         """
         Test if multiple calls of creating a new collection with a legacy
         schema is blocked.
@@ -114,7 +116,7 @@ class TestMechanicNewCollection:
         assert result.exit_code == 1
         assert result.output
     
-    @pytest.mark.dependency(depends=["TestMechanicNewCollection::test_legacy_version_same_colection_name_blocked"])
+    @pytest.mark.dependency(depends=["TestMechanicNewCollection::test_legacy_version_same_collection_name_blocked"])
     def test_legacy_version_into_latest_version_collection_blocked(self, runner):
         """
         If a structure collection already exists with schema x and then someone
@@ -132,7 +134,8 @@ class TestMechanicNewCollection:
     def test_nonexistent_version_blocking(self, runner):
         """
         Check a nonexistent schema version is not installed and cli call
-        results in error.
+        results in error. The first version was 1.0, therefore, anything
+        before this should fail.
         """
         test_args = ["mechanic", "new-structure-collection", "unittest_nonexistent_schema", "--version", "v0.1"]
         result = runner.invoke(args=test_args)
