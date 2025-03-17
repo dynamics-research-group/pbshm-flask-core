@@ -50,6 +50,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
+local_test_credentials.json
 
 # Translations
 *.mo

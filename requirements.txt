@@ -2,3 +2,6 @@ Flask==2.3.2
 Werkzeug==2.3.3
 pymongo==4.3.3
 pytz==2022.6
+pytest==8.1.1
+pytest-dependency==0.6.0
+tzdata==2024.1

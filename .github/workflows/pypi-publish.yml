@@ -4,7 +4,12 @@ on:
         branches:
             - main
 jobs:
+    test:
+        uses: ./.github/workflows/pytest-core.yml
     build:
+        needs:
+            - test
+        if: ${{ success() }}
         name: Build distribution files
         runs-on: ubuntu-latest
         steps:
@@ -22,6 +27,7 @@ jobs:
         name: Publish to PyPI
         needs:
             - build
+        if: ${{ success() }}
         runs-on: ubuntu-latest
         environment:
             name: release
