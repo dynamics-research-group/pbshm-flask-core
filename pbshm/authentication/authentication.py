@@ -121,7 +121,7 @@ def login():
                 if needs_updating:
                     user_collection().update_one(
                         {"_id": user["_id"]},
-                        {"$set": {"password": generate_password_hash(password, "pbkdf2", 128)}}
+                        {"$set": {"password": generate_password_hash(password, method="scrypt:32768:8:1", salt_length=128)}}
                     )
                 session.clear()
                 session["user_id"] = str(user["_id"])
