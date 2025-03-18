@@ -75,7 +75,7 @@ def initialise_sub_system_new_root_user(email_address, password, first_name, sec
     db = db_connect()
     db[current_app.config["USER_COLLECTION"]].insert_one({
         "emailAddress": email_address,
-        "password": generate_password_hash(password, "sha3_512", 128),
+        "password": generate_password_hash(password, method="scrypt:32768:8:1", salt_length=128),
         "firstName": first_name,
         "secondName": second_name,
         "permissions": ["root"],

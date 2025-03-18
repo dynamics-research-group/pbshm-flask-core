@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pbshm-core"
-version = "1.1.4"
+version = "1.1.5"
 authors = [
     { name = "Dan Brennan", email = "d.s.brennan@sheffield.ac.uk" }
 ]
@@ -18,8 +18,8 @@ classifiers = [
 ]
 requires-python = ">=3.9.18"
 dependencies = [
-    "Flask == 2.3.2",
-    "Werkzeug == 2.3.3",
+    "Flask == 3.0.3",
+    "Werkzeug == 3.0.3",
     "pymongo == 4.3.3",
     "pytz == 2022.6"
 ]
