@@ -5,7 +5,7 @@ import hmac
 from bson import ObjectId
 from flask import Blueprint, g, render_template, request, session, redirect, url_for, current_app
 from werkzeug.exceptions import Unauthorized
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from pbshm.db import user_collection
 
@@ -13,25 +13,13 @@ from pbshm.db import user_collection
 bp = Blueprint("authentication", __name__, template_folder="templates")
 
 
-def generate_password_hash_includes_sha3(method, salt, password):
+def generate_password_hash_sha3_512(method, salt, password):
     """
-    A wrapper of Werkzeug's generate_password_hash, extended to support 
-    SHA3_512 for legacy purposes. Taken from Werkzeug source code (version < 2.4).
-    Deprecated hash algorithms return "DEPRECATED" to signal the need for a
-    hash update, instead of the usual method and parameters.
+    Hash function for SHA3_512 for legacy purposes.
     """
-    if method.split(":")[0] not in ("scrypt", "pbkdf2"):
-        salt_bytes = salt.encode()
-        password_bytes = password.encode()
-        return (
-            hmac.new(salt_bytes, password_bytes, method).hexdigest(),
-            "DEPRECATED"
-        )
-    else:
-        return (
-            generate_password_hash(method, salt, password),
-            method
-        )
+    salt_bytes = salt.encode()
+    password_bytes = password.encode()
+    return hmac.new(salt_bytes, password_bytes, method).hexdigest()
 
 
 def check_password_hash_includes_sha3(pwhash, password):
@@ -41,16 +29,12 @@ def check_password_hash_includes_sha3(pwhash, password):
     second indicates if the hash requires updating.
     """
     method, salt, hashval = pwhash.split('$', 2)
-    hashed_pw, method = generate_password_hash_includes_sha3(method, salt, password)
-    
-    passwords_match = hmac.compare_digest(hashed_pw, hashval)
-    # Even if the hash needs updating, the hash is not updated because the
-    # passwords do not match! This is an absolute fail safe as the update
-    # actually happens inside a conditional only if the passwords match, but
-    # better to be safe than sorry!
-    needs_updating = (method == "DEPRECATED") if passwords_match else False
-
-    return passwords_match, needs_updating
+    if method == "sha3_512":
+        hashed_pw = generate_password_hash_sha3_512(method, salt, password)
+        passwords_match = hmac.compare_digest(hashed_pw, hashval)
+        return passwords_match, True
+    else:
+        return (check_password_hash(pwhash, password), False)
 
 
 #Login View
