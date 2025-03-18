@@ -12,76 +12,36 @@ from pbshm.db import user_collection
 #Create the Authentication Blueprint
 bp = Blueprint("authentication", __name__, template_folder="templates")
 
-DEFAULT_PBKDF2_ITERATIONS = 600000
 
-
-def _drg_hash_internal(method, salt, password):
+def generate_password_hash_includes_sha3(method, salt, password):
     """
-    A modified version of Werkzeug's '_hash_internal', extended to support 
+    A wrapper of Werkzeug's generate_password_hash, extended to support 
     SHA3_512 for legacy purposes. Taken from Werkzeug source code (version < 2.4).
     Deprecated hash algorithms return "DEPRECATED" to signal the need for a
     hash update, instead of the usual method and parameters.
     """
-    method, *args = method.split(":")
-    salt_bytes = salt.encode()
-    password_bytes = password.encode()
-
-    if method == "scrypt":
-        if not args:
-            n = 2**15
-            r = 8
-            p = 1
-        else:
-            try:
-                n, r, p = map(int, args)
-            except ValueError:
-                raise ValueError("'scrypt' takes 3 arguments.") from None
-
-        maxmem = 132 * n * r * p  # ideally 128, but some extra seems needed
-        return (
-            hashlib.scrypt(
-                password_bytes, salt=salt_bytes, n=n, r=r, p=p, maxmem=maxmem
-            ).hex(),
-            f"scrypt:{n}:{r}:{p}",
-        )
-    
-    elif method == "pbkdf2":
-        len_args = len(args)
-
-        if len_args == 0:
-            hash_name = "sha256"
-            iterations = DEFAULT_PBKDF2_ITERATIONS
-        elif len_args == 1:
-            hash_name = args[0]
-            iterations = DEFAULT_PBKDF2_ITERATIONS
-        elif len_args == 2:
-            hash_name = args[0]
-            iterations = int(args[1])
-        else:
-            raise ValueError("'pbkdf2' takes 2 arguments.")
-
-        return (
-            hashlib.pbkdf2_hmac(
-                hash_name, password_bytes, salt_bytes, iterations
-            ).hex(),
-            f"pbkdf2:{hash_name}:{iterations}",
-        )
-    
-    else:
+    if method.split(":")[0] not in ("scrypt", "pbkdf2"):
+        salt_bytes = salt.encode()
+        password_bytes = password.encode()
         return (
             hmac.new(salt_bytes, password_bytes, method).hexdigest(),
             "DEPRECATED"
         )
+    else:
+        return (
+            generate_password_hash(method, salt, password),
+            method
+        )
 
 
-def drg_check_password_hash(pwhash, password):
+def check_password_hash_includes_sha3(pwhash, password):
     """
     Verifies if the password matches the given hash (pwhash). 
     Returns two booleans: the first indicates if the passwords match, and the 
     second indicates if the hash requires updating.
     """
     method, salt, hashval = pwhash.split('$', 2)
-    hashed_pw, method = _drg_hash_internal(method, salt, password)
+    hashed_pw, method = generate_password_hash_includes_sha3(method, salt, password)
     
     passwords_match = hmac.compare_digest(hashed_pw, hashval)
     # Even if the hash needs updating, the hash is not updated because the
@@ -119,7 +79,7 @@ def login():
         if error is not None:
             return render_template("login.html", error=error)
         
-        passwords_match, needs_updating = drg_check_password_hash(user["password"], password)
+        passwords_match, needs_updating = check_password_hash_includes_sha3(user["password"], password)
         if not passwords_match:
             error = "This email address and password do not match any credentials."
         else:
