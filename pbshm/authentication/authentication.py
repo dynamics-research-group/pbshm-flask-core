@@ -98,36 +98,42 @@ def drg_check_password_hash(pwhash, password):
 def login():
     #Handle Request
     error = None
-    if(request.method == "POST"):
+    if (request.method == "POST"):
         #Validate Inputs
         email_address = request.form["email-address"]
         password = request.form["password"]
         if not email_address: error = "Missing email address."
         elif not password: error = "Missing password."
         #Process Request if no error
-        if error is None:
-            user = user_collection().find_one(
-                { "emailAddress": email_address },
-                { "_id": 1, "password": 1, "enabled": 1}
-            )
-            passwords_match, needs_updating = drg_check_password_hash(user["password"], password)
-            if user is None:
-                error = "Unable to locate these credentials."
-            elif not user["enabled"]:
-                error = "This account has been disabled."
-            elif not passwords_match:
-                error = "This email address and password do not match any credentials."
-            else:
-                if needs_updating:
-                    user_collection().update_one(
-                        {"_id": user["_id"]},
-                        {"$set": {"password": generate_password_hash(password, method="scrypt:32768:8:1", salt_length=128)}}
-                    )
-                session.clear()
-                session["user_id"] = str(user["_id"])
-                return redirect("/")
+        if error is not None:
+            return render_template("login.html", error=error)
+        
+        user = user_collection().find_one(
+            { "emailAddress": email_address },
+            { "_id": 1, "password": 1, "enabled": 1}
+        )
+        if user is None:
+            error = "Unable to locate these credentials."
+        elif not user["enabled"]:
+            error = "This account has been disabled."
+        if error is not None:
+            return render_template("login.html", error=error)
+        
+        passwords_match, needs_updating = drg_check_password_hash(user["password"], password)
+        if not passwords_match:
+            error = "This email address and password do not match any credentials."
+        else:
+            if needs_updating:
+                user_collection().update_one(
+                    {"_id": user["_id"]},
+                    {"$set": {"password": generate_password_hash(password, method="scrypt:32768:8:1", salt_length=128)}}
+                )
+            session.clear()
+            session["user_id"] = str(user["_id"])
+            return redirect("/")
     #Render Login Template
     return render_template("login.html", error=error)
+
 
 #Logout View
 @bp.route("/logout")
