@@ -18,9 +18,9 @@ classifiers = [
 ]
 requires-python = ">=3.9.18"
 dependencies = [
-    "Flask == 3.0.3",
-    "Werkzeug == 3.0.3",
-    "pymongo == 4.3.3",
+    "Flask == 3.1.1",
+    "Werkzeug == 3.0.6",
+    "pymongo == 4.6.3",
     "pytz == 2022.6"
 ]
 
