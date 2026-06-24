@@ -11,7 +11,7 @@
                 <img src="{{ url_for('layout.static', filename='logo.png') }}" class="drg-logo">
             </a>
             <!-- Toggle Icon -->
-            <button type="button" class="navbar-toggler mt-1" data-toggle="collapse" data-target="#side-navigation"
+            <button type="button" class="navbar-toggler mt-1" data-bs-toggle="collapse" data-bs-target="#side-navigation"
                 aria-controls="side-navigation" aria-expanded="false" aria-label="toggle navigation">
                 <span class="navbar-toggler-icon" aria-hidden="true"></span>
             </button>
@@ -23,7 +23,7 @@
                             {{ item }}
                             <ul class="nav flex-column">
                                 {% for sub_item in config["NAVIGATION"][item] %}
-                                    <li class="nav-item pl-2 py-1">
+                                    <li class="nav-item ps-2 py-1">
                                         <a href='{{ url_for(config["NAVIGATION"][item][sub_item]) }}' class="text-white">
                                             {{ sub_item }}
                                         </a>
@@ -34,7 +34,7 @@
                     {% endfor %}
                 </ul>
                 <!-- Logout -->
-                <a href='{{ url_for("authentication.logout") }}' class="btn btn-block btn-outline-success mt-auto">
+                <a href='{{ url_for("authentication.logout") }}' class="btn w-100 btn-outline-success mt-auto">
                     Logout
                 </a>
             </div>
