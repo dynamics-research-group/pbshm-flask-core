@@ -4,7 +4,7 @@
 <div class="d-flex vh-100 {{ config_option('login.background', 'bg-dark') }}">
     <form method="POST" class="login-form needs-validation m-auto p-4">
         <div class="d-flex flex-column mb-3">
-            <img class="mx-auto mb-4 {{ config_option('login.logo', 'drg-logo') }}"
+            <img class="mx-auto mb-4 {{ config_option('login.logo', 'app-logo') }}"
                 src="{{ url_for('layout.static', filename=config_option('login.logo_filename', 'logo.png')) }}">
             <p class="text-center {{ config_option('login.text', 'text-light') }}">
                 {{ config["LOGIN_MESSAGE"] }}

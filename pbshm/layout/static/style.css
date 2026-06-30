@@ -1,12 +1,12 @@
 /* Generic Elements */
-img.drg-logo{
+img.app-logo{
     filter:invert(80%);
 }
 /* Login Layout */
 .login-form{
     max-width: 500px;
 }
-.login-form img.drg-logo{
+.login-form img.app-logo{
     width: 12rem;
 }
 /* Portal Layout */
