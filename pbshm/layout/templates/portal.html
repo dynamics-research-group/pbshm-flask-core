@@ -3,9 +3,9 @@
 <!-- Layout -->
 <div class="d-flex flex-column flex-md-row vh-100 {{ config_option('portal.background', 'bg-white') }}">
     <!-- Side Section -->
-    <section class="side-section {{ config_option('portal.side_section', 'bg-dark') }}">
+    <section class="flex-grow-0 flex-shrink-0 px-3 {{ config_option('portal.side_section', 'bg-dark side-section') }}">
         <!-- Navigation -->
-        <nav role="navigation" class="navbar navbar-dark navbar-expand-md d-md-flex flex-md-column align-items-start h-100">
+        <nav role="navigation" class="d-md-flex flex-md-column align-items-start navbar navbar-expand-md h-100">
             <!-- Logo -->
             <a class="navbar-brand" href="/">
                 <img class="{{ config_option('portal.logo', 'app-logo') }}"
@@ -17,15 +17,15 @@
                 <span class="navbar-toggler-icon" aria-hidden="true"></span>
             </button>
             <!-- Items -->
-            <div id="side-navigation" class="collapse navbar-collapse flex-column align-items-start w-100">
-                <ul class="navbar-nav flex-column my-1 mt-md-4">
+            <div id="side-navigation" class="flex-md-grow-1 d-md-flex flex-md-column collapse navbar-collapse w-100">
+                <ul class="flex-md-grow-1 d-flex flex-column navbar-nav w-100">
                     {% for item in config["NAVIGATION"] %}
-                        <li class="nav-item {{ config_option('portal.navigation_section', 'text-white-50 text-capitalize') }}">
-                            {{ item }}
+                        <li class="{{ config_option('portal.navigation_section', 'nav-item text-white-50 mt-2') }}">
+                            {{ item | title }}
                             <ul class="nav flex-column">
                                 {% for sub_item in config["NAVIGATION"][item] %}
-                                    <li class="nav-item ps-2 py-1">
-                                        <a class="{{ config_option('portal.navigation_item', 'text-white') }}"
+                                    <li class="{{ config_option('portal.navigation_item', 'nav-item') }}">
+                                        <a class="{{ config_option('portal.navigation_link', 'nav-link text-white') }}"
                                             href='{{ url_for(config["NAVIGATION"][item][sub_item]) }}'>
                                             {{ sub_item }}
                                         </a>
@@ -34,20 +34,22 @@
                             </ul>
                         </li>
                     {% endfor %}
+                    <!-- Logout -->
+                    <li class="mt-auto nav-item {{ config_option('portal.navigation_logout', 'text-white') }}">
+                        <a class="btn w-100 {{ config_option('portal.logout', 'btn-outline-success') }}"
+                            href='{{ url_for("authentication.logout") }}'>
+                            {{ config_option("portal.logout_text", "Logout") }}
+                        </a>
+                    </li>
                 </ul>
-                <!-- Logout -->
-                <a class="btn w-100 mt-auto {{ config_option('portal.logout', 'btn-outline-success') }}"
-                    href='{{ url_for("authentication.logout") }}'>
-                    {{ config_option("portal.logout_text", "Logout") }}
-                </a>
             </div>
         </nav>
     </section>
     <!-- Content -->
-    <section class="d-flex flex-column flex-grow-1 overflow-auto">
+    <section class="flex-grow-1 d-flex flex-column overflow-auto">
         <!-- Header -->
         <header>
-            <nav class="navbar border-bottom {{ config_option('portal.header_section', 'navbar-light border-secondary') }}">
+            <nav class="navbar border-bottom px-3 {{ config_option('portal.header_section', 'navbar-light border-secondary') }}">
                 <h1 class="{{ config_option('portal.header', 'text-dark') }}">{% block title %}&nbsp;{% endblock %}</h1>
                 <form class="inline-form">
                     {% block title_call_to_action %}
