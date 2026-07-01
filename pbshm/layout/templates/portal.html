@@ -1,53 +1,10 @@
 {% extends 'base.html'%}
 {% block layout %}
-<!-- Layout -->
+<!-- layout -->
 <div class="d-flex flex-column flex-md-row vh-100 {{ config_option('portal.background', 'bg-white') }}">
-    <!-- Side Section -->
-    <section class="flex-grow-0 flex-shrink-0 px-3 {{ config_option('portal.side_section', 'bg-dark side-section') }}">
-        <!-- Navigation -->
-        <nav role="navigation" class="d-md-flex flex-md-column align-items-start navbar navbar-expand-md h-100">
-            <!-- Logo -->
-            <a class="navbar-brand" href="/">
-                <img class="{{ config_option('portal.logo', 'app-logo') }}"
-                    src="{{ url_for('layout.static', filename=config_option('portal.logo_filename', 'logo.png')) }}">
-            </a>
-            <!-- Toggle Icon -->
-            <button type="button" class="navbar-toggler mt-1" data-bs-toggle="collapse" data-bs-target="#side-navigation"
-                aria-controls="side-navigation" aria-expanded="false" aria-label="toggle navigation">
-                <span class="navbar-toggler-icon" aria-hidden="true"></span>
-            </button>
-            <!-- Items -->
-            <div id="side-navigation" class="flex-md-grow-1 d-md-flex flex-md-column collapse navbar-collapse w-100">
-                <ul class="flex-md-grow-1 d-flex flex-column navbar-nav w-100">
-                    {% for item in config["NAVIGATION"] %}
-                        <li class="{{ config_option('portal.navigation_section', 'nav-item text-white-50 mt-2') }}">
-                            {{ item | title }}
-                            <ul class="nav flex-column">
-                                {% for sub_item in config["NAVIGATION"][item] %}
-                                    <li class="{{ config_option('portal.navigation_item', 'nav-item') }}">
-                                        <a class="{{ config_option('portal.navigation_link', 'nav-link text-white') }}"
-                                            href='{{ url_for(config["NAVIGATION"][item][sub_item]) }}'>
-                                            {{ sub_item }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endfor %}
-                    <!-- Logout -->
-                    <li class="mt-auto nav-item {{ config_option('portal.navigation_logout', 'text-white') }}">
-                        <a class="btn w-100 {{ config_option('portal.logout', 'btn-outline-success') }}"
-                            href='{{ url_for("authentication.logout") }}'>
-                            {{ config_option("portal.logout_text", "Logout") }}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </section>
-    <!-- Content -->
+    <!-- content -->
     <section class="flex-grow-1 d-flex flex-column overflow-auto">
-        <!-- Header -->
+        <!-- header -->
         <header>
             <nav class="navbar border-bottom px-3 {{ config_option('portal.header_section', 'navbar-light border-secondary') }}">
                 <h1 class="{{ config_option('portal.header', 'text-dark') }}">{% block title %}&nbsp;{% endblock %}</h1>
@@ -57,12 +14,12 @@
                 </form>
             </nav>
         </header>
-        <!-- Main Content -->
+        <!-- main -->
         <main role="main" class="container-fluid flex-grow-1 mt-2 {{ config_option('portal.content_section', 'bg-transparent') }}">
             {% block content %}
             {% endblock %}
         </main>
-        <!-- Footer -->
+        <!-- footer -->
         <footer class="d-flex flex-row justify-content-center p-2 {{ config_option('portal.footer_section', 'bg-light') }}">
             <div>{{ config["FOOTER_MESSAGE"] }}</div>
         </footer>
