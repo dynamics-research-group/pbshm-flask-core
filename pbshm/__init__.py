@@ -6,41 +6,43 @@ from werkzeug.exceptions import Unauthorized
 
 from pbshm import authentication, initialisation, layout, mechanic, timekeeper
 
+
 def create_app(test_config=None):
-    #Create Flask App
+    # Create Flask App
     app = Flask(__name__, instance_relative_config=True)
 
-    #Load Configuration
+    # Load Configuration
     app.config.from_mapping(
-        PAGE_SUFFIX=" - PBSHM Core",
+        PAGE_SUFFIX="",
         LOGIN_MESSAGE="Welcome to the Dynamics Research Group PBSHM Core, please enter your authentication credentials below.",
-        FOOTER_MESSAGE="PBSHM Core © Dynamics Research Group 2022 - 2024",
-        NAVIGATION={
-            "modules":{
-                "Home": "layout.home"
-            }
-        }
+        FOOTER_MESSAGE="PBSHM Core © Dynamics Research Group 2022 - 2026",
+        NAVIGATION_MODE="text",
+        NAVIGATION={"modules": {"Home": "layout.home"}},
     )
-    app.config.from_file("config.json", load=json.load, silent=True) if test_config is None else app.config.from_mapping(test_config)
+    (
+        app.config.from_file("config.json", load=json.load, silent=True)
+        if test_config is None
+        else app.config.from_mapping(test_config)
+    )
 
-    #Ensure Instance Folder
+    # Ensure Instance Folder
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
 
-    #Add Blueprints
-    app.register_blueprint(initialisation.bp) ## Initialisation
-    app.register_blueprint(mechanic.bp) ## Mechanic
-    app.register_blueprint(layout.bp, url_prefix="/layout") ## Layout
-    app.register_blueprint(timekeeper.bp, url_prefix="/timekeeper") ## Timekeeper
-    app.register_blueprint(authentication.bp, url_prefix="/authentication") ## Authentication
+    # Add Blueprints
+    app.register_blueprint(initialisation.bp)  ## Initialisation
+    app.register_blueprint(mechanic.bp)  ## Mechanic
+    app.register_blueprint(layout.bp, url_prefix="/layout")  ## Layout
+    app.register_blueprint(timekeeper.bp, url_prefix="/timekeeper")  ## Timekeeper
+    app.register_blueprint(authentication.bp, url_prefix="/authentication")  ## Authentication
 
-    #Set Root Page
+    # Set Root Page
     app.add_url_rule("/", endpoint="layout.home")
 
-    #Register Exceptions
+    # Register Exceptions
     app.register_error_handler(Unauthorized, authentication.handle_unauthorised_request)
 
-    #Return App
+    # Return App
     return app
