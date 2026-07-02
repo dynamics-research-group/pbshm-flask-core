@@ -8,7 +8,7 @@
         <img class="{{ config_option('portal.logo', 'app-logo me-auto ms-3 ms-md-auto my-md-3') }}"
             src="{{ url_for('layout.static', filename=config_option('portal.logo_filename', 'logo.png')) }}">
         <!-- icons -->
-        <ul class="flex-grow-1 d-flex flex-row flex-md-column justify-content-end my-2 ps-0"
+        <ul class="flex-grow-1 d-flex flex-row flex-md-column justify-content-end list-unstyled my-2 ps-0"
             id="icon-navigation">
             {% set icon_size = config_option("portal.navigation_icon_size", 32) %}
             {% for icon in config["NAVIGATION"] + [{'sprite_id':'logout', 'endpoint':'authentication.logout'}] %}
