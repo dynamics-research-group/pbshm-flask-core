@@ -2,7 +2,7 @@
 {% block title %}Login{% endblock %}
 {% block layout %}
 <div class="d-flex vh-100 {{ config_option('login.background', 'bg-dark') }}">
-    <form method="POST" class="login-form needs-validation m-auto p-4">
+    <form method="POST" class="needs-validation m-auto p-4 {{ config_option('login.form', 'login-form') }}">
         <div class="d-flex flex-column mb-3">
             <img class="mx-auto mb-4 {{ config_option('login.logo', 'app-logo') }}"
                 src="{{ url_for('layout.static', filename=config_option('login.logo_filename', 'logo.png')) }}">
