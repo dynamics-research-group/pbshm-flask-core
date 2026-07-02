@@ -2,6 +2,11 @@
 {% block layout %}
 <!-- layout -->
 <div class="d-flex flex-column flex-md-row vh-100 {{ config_option('portal.background', 'bg-white') }}">
+    {% if config.get("NAVIGATION_MODE", "text") == "text" %}
+        {% include "sidebars/text.html" with context %}
+    {% elif config.get("NAVIGATION_MODE") == "icon" %}
+        {% include "sidebars/icon.html" with context %}
+    {% endif %}
     <!-- content -->
     <section class="flex-grow-1 d-flex flex-column overflow-auto">
         <!-- header -->
