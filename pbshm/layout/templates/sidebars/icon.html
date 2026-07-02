@@ -1,0 +1,40 @@
+<!-- svg symbols -->
+{% include config_option("portal.navigation_sprite", "sidebars/sprite.svg") %}
+<!-- icon sidebar -->
+<section class="flex-grow-0 flex-shrink-0 {{ config_option('portal.sidebar', 'bg-dark sidebar-icon') }}">
+    <!-- navigation -->
+    <nav role="navigation" class="d-flex flex-row flex-md-column justify-content-center h-100">
+        <!-- logo -->
+        <img class="{{ config_option('portal.logo', 'app-logo me-auto ms-3 ms-md-auto my-md-3') }}"
+            src="{{ url_for('layout.static', filename=config_option('portal.logo_filename', 'logo.png')) }}">
+        <!-- icons -->
+        <ul class="flex-grow-1 d-flex flex-row flex-md-column justify-content-end my-2 ps-0"
+            id="icon-navigation">
+            {% set icon_size = config_option("portal.navigation_icon_size", 32) %}
+            {% for icon in config["NAVIGATION"] + [{'sprite_id':'logout', 'endpoint':'authentication.logout'}] %}
+            <li class="{{ 'd-block d-md-none ' if loop.last }}{{ config_option('portal.navigation_item', 'mx-2') }}">
+                <a class="{{ config_option('portal.navigation_link', 'btn btn-dark py-3 w-100') }}"
+                    href="{{ url_for(icon['endpoint']) }}">
+                    <svg class="{{ config_option('portal.navigation_svg', 'text-white') }}"
+                        width="{{ icon_size }}" height="{{ icon_size }}" preserveAspectRatio="xMaxYMin">
+                        <use xlink:href="#{{ icon['sprite_id'] }}"></use>
+                    </svg>
+                </a>
+            </li>
+            {% endfor %}
+            {% set icon_size = config_option("portal.navigation_profile_icon_size", 48) %}
+            <li class="d-none d-md-block mt-auto {{ config_option('portal.navigation_profile_item', 'text-center mb-2 me-3 me-md-0') }}">
+                <svg class="{{ config_option('portal.navigation_profile_svg', 'text-white border border-white rounded-circle fs-3 p-2') }}"
+                    width="{{ icon_size }}" height="{{ icon_size }}" preserveAspectRatio="xMaxYMin">
+                    <use xlink:href="#{{ config_option('portal.navigation_profile_symbol', 'profile') }}"></use>
+                </svg>
+            </li>
+            <li class="d-none d-md-block {{ config_option('portal.navigation_logout', 'mx-2 mt-3') }}">
+                <a class="{{ config_option('portal.logout', 'btn btn-outline-success w-100') }}"
+                    href='{{ url_for("authentication.logout") }}'>
+                    {{ config_option("portal.logout_text", "Logout") }}
+                </a>
+            </li>
+        </ul>
+    </nav>
+</section>
