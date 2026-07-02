@@ -13,10 +13,8 @@
         <header>
             <nav class="navbar border-bottom px-3 {{ config_option('portal.header_section', 'navbar-light border-secondary') }}">
                 <h1 class="{{ config_option('portal.header', 'text-dark') }}">{% block title %}&nbsp;{% endblock %}</h1>
-                <form class="inline-form">
-                    {% block title_call_to_action %}
-                    {% endblock %}
-                </form>
+                {% block title_call_to_action %}
+                {% endblock %}
             </nav>
         </header>
         <!-- main -->
