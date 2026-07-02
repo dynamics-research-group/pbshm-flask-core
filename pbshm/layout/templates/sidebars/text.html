@@ -16,7 +16,7 @@
         <div id="side-navigation" class="flex-md-grow-1 d-md-flex flex-md-column collapse navbar-collapse w-100">
             <ul class="flex-md-grow-1 d-flex flex-column navbar-nav w-100">
                 {% for item in config["NAVIGATION"] %}
-                    <li class="{{ config_option('portal.navigation_section', 'nav-item text-white-50 mt-2') }}">
+                    <li class="{{ config_option('portal.navigation_section_item', 'nav-item text-white-50 mt-2') }}">
                         {{ item | title }}
                         <ul class="nav flex-column">
                             {% for sub_item in config["NAVIGATION"][item] %}
@@ -31,7 +31,7 @@
                     </li>
                 {% endfor %}
                 <!-- Logout -->
-                <li class="mt-auto nav-item {{ config_option('portal.navigation_logout', 'text-white') }}">
+                <li class="mt-auto nav-item {{ config_option('portal.navigation_logout_item', 'text-white') }}">
                     <a class="btn w-100 {{ config_option('portal.logout', 'btn-outline-success') }}"
                         href='{{ url_for("authentication.logout") }}'>
                         {{ config_option("portal.logout_text", "Logout") }}

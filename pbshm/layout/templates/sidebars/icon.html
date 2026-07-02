@@ -1,5 +1,5 @@
 <!-- svg symbols -->
-{% include config_option("portal.navigation_sprite", "sidebars/sprite.svg") %}
+{% include config_option("portal.navigation_svg_sprite", "sidebars/sprite.svg") %}
 <!-- icon sidebar -->
 <section class="flex-grow-0 flex-shrink-0 {{ config_option('portal.sidebar', 'bg-dark sidebar-icon') }}">
     <!-- navigation -->
@@ -29,7 +29,7 @@
                     <use xlink:href="#{{ config_option('portal.navigation_profile_symbol', 'profile') }}"></use>
                 </svg>
             </li>
-            <li class="d-none d-md-block {{ config_option('portal.navigation_logout', 'mx-2 mt-3') }}">
+            <li class="d-none d-md-block {{ config_option('portal.navigation_logout_item', 'mx-2 mt-3') }}">
                 <a class="{{ config_option('portal.logout', 'btn btn-outline-success w-100') }}"
                     href='{{ url_for("authentication.logout") }}'>
                     {{ config_option("portal.logout_text", "Exit") }}
