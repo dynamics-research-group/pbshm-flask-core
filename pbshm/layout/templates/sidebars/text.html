@@ -17,13 +17,13 @@
             <ul class="flex-md-grow-1 d-flex flex-column navbar-nav w-100">
                 {% for item in config["NAVIGATION"] %}
                     <li class="{{ config_option('portal.navigation_section_item', 'nav-item text-white-50 mt-2') }}">
-                        {{ item | title }}
+                        {{ item["title"] | title }}
                         <ul class="nav flex-column">
-                            {% for sub_item in config["NAVIGATION"][item] %}
+                            {% for sub_item in item["items"] %}
                                 <li class="{{ config_option('portal.navigation_item', 'nav-item') }}">
                                     <a class="{{ config_option('portal.navigation_link', 'nav-link text-white') }}"
-                                        href='{{ url_for(config["NAVIGATION"][item][sub_item]) }}'>
-                                        {{ sub_item }}
+                                        href='{{ url_for(sub_item["endpoint"]) }}'>
+                                        {{ sub_item["title"] }}
                                     </a>
                                 </li>
                             {% endfor %}

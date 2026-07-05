@@ -17,7 +17,7 @@ def create_app(test_config=None):
         LOGIN_MESSAGE="Welcome to the Dynamics Research Group PBSHM Core, please enter your authentication credentials below.",
         FOOTER_MESSAGE="PBSHM Core © Dynamics Research Group 2022 - 2026",
         NAVIGATION_MODE="text",
-        NAVIGATION={"modules": {"Home": "layout.home"}},
+        NAVIGATION=[{"title": "Modules", "items": [{"title": "Home", "endpoint": "layout.home"}]}],
     )
     (
         app.config.from_file("config.json", load=json.load, silent=True)
