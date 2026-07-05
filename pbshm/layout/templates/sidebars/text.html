@@ -22,7 +22,7 @@
                             {% for sub_item in item["items"] %}
                                 <li class="{{ config_option('portal.navigation_item', 'nav-item') }}">
                                     <a class="{{ config_option('portal.navigation_link', 'nav-link text-white') }}"
-                                        href='{{ url_for(sub_item["endpoint"]) }}'>
+                                        href='{{ url_for(sub_item["endpoint"], **navigation_parameters(sub_item)) }}'>
                                         {{ sub_item["title"] }}
                                     </a>
                                 </li>

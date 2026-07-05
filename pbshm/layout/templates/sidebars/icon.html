@@ -14,7 +14,7 @@
             {% for icon in config["NAVIGATION"] + [{'sprite_id':'logout', 'endpoint':'authentication.logout'}] %}
             <li class="{{ 'd-block d-md-none ' if loop.last }}{{ config_option('portal.navigation_item', 'mx-2') }}">
                 <a class="{{ config_option('portal.navigation_link', 'btn btn-dark py-3 w-100') }}"
-                    href="{{ url_for(icon['endpoint']) }}">
+                    href="{{ url_for(icon['endpoint'], **navigation_parameters(icon)) }}">
                     <svg class="{{ config_option('portal.navigation_svg', 'text-white') }}"
                         width="{{ icon_size }}" height="{{ icon_size }}" preserveAspectRatio="xMaxYMin">
                         <use xlink:href="#{{ icon['sprite_id'] }}"></use>
