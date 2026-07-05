@@ -22,9 +22,17 @@ def config_option(options_key, default=""):
         branch = branch[part]
     return branch if branch else default
 
+def navigation_parameters(parameters: dict) -> dict:
+    return {
+        key: parameters[key]
+        for key in parameters.keys()
+        if key not in ["sprite_id", "title", "endpoint"]
+    }
+
 @bp.record_once
 def register_functions(state):
     state.app.jinja_env.globals["config_option"] = config_option
+    state.app.jinja_env.globals["navigation_parameters"] = navigation_parameters
 
 @bp.route("/home")
 @authenticate_request("layout-home")
