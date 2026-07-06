@@ -18,7 +18,7 @@ class TestLogin:
         """
         response = client.get("/authentication/login")
         assert response_code_successful(response) == 1
-        assert b"<title>Login - PBSHM Core</title>" in response.data
+        assert b"<title>Login</title>" in response.data
 
     @pytest.mark.dependency(depends=["TestLogin::test_login_loads"])
     def test_authenticated_fixture(self, authenticated_client):
