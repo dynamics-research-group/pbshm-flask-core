@@ -1,0 +1,43 @@
+<!-- text sidebar -->
+<section class="flex-grow-0 flex-shrink-0 px-3 {{ config_option('portal.sidebar', 'bg-dark sidebar-text') }}">
+    <!-- Navigation -->
+    <nav role="navigation" class="d-md-flex flex-md-column align-items-start navbar navbar-expand-md h-100">
+        <!-- Logo -->
+        <a class="navbar-brand" href="/">
+            <img class="{{ config_option('portal.logo', 'app-logo') }}"
+                src="{{ url_for('layout.static', filename=config_option('portal.logo_filename', 'logo.png')) }}">
+        </a>
+        <!-- Toggle Icon -->
+        <button type="button" class="navbar-toggler mt-1" data-bs-toggle="collapse" data-bs-target="#side-navigation"
+            aria-controls="side-navigation" aria-expanded="false" aria-label="toggle navigation">
+            <span class="navbar-toggler-icon" aria-hidden="true"></span>
+        </button>
+        <!-- Items -->
+        <div id="side-navigation" class="flex-md-grow-1 d-md-flex flex-md-column collapse navbar-collapse w-100">
+            <ul class="flex-md-grow-1 d-flex flex-column navbar-nav w-100">
+                {% for item in config["NAVIGATION"] %}
+                    <li class="{{ config_option('portal.navigation_section_item', 'nav-item text-white-50 mt-2') }}">
+                        {{ item["title"] | title }}
+                        <ul class="nav flex-column">
+                            {% for sub_item in item["items"] %}
+                                <li class="{{ config_option('portal.navigation_item', 'nav-item') }}">
+                                    <a class="{{ config_option('portal.navigation_link', 'nav-link text-white') }}"
+                                        href='{{ url_for(sub_item["endpoint"], **navigation_parameters(sub_item)) }}'>
+                                        {{ sub_item["title"] }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+                <!-- Logout -->
+                <li class="mt-auto nav-item {{ config_option('portal.navigation_logout_item', 'text-white') }}">
+                    <a class="btn w-100 {{ config_option('portal.logout', 'btn-outline-success') }}"
+                        href='{{ url_for("authentication.logout") }}'>
+                        {{ config_option("portal.logout_text", "Logout") }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</section>

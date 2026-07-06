@@ -1,64 +1,31 @@
 {% extends 'base.html'%}
 {% block layout %}
-<!-- Layout -->
-<div class="d-flex flex-column flex-md-row vh-100">
-    <!-- Side Section -->
-    <section class="side-section bg-dark">
-        <!-- Navigation -->
-        <nav role="navigation" class="navbar navbar-dark navbar-expand-md d-md-flex flex-md-column align-items-start h-100">
-            <!-- Logo -->
-            <a class="navbar-brand" href="/">
-                <img src="{{ url_for('layout.static', filename='logo.png') }}" class="drg-logo">
-            </a>
-            <!-- Toggle Icon -->
-            <button type="button" class="navbar-toggler mt-1" data-bs-toggle="collapse" data-bs-target="#side-navigation"
-                aria-controls="side-navigation" aria-expanded="false" aria-label="toggle navigation">
-                <span class="navbar-toggler-icon" aria-hidden="true"></span>
-            </button>
-            <!-- Items -->
-            <div id="side-navigation" class="collapse navbar-collapse flex-column align-items-start w-100">
-                <ul class="navbar-nav flex-column my-1 mt-md-4">
-                    {% for item in config["NAVIGATION"] %}
-                        <li class="nav-item text-white-50 text-capitalize">
-                            {{ item }}
-                            <ul class="nav flex-column">
-                                {% for sub_item in config["NAVIGATION"][item] %}
-                                    <li class="nav-item ps-2 py-1">
-                                        <a href='{{ url_for(config["NAVIGATION"][item][sub_item]) }}' class="text-white">
-                                            {{ sub_item }}
-                                        </a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endfor %}
-                </ul>
-                <!-- Logout -->
-                <a href='{{ url_for("authentication.logout") }}' class="btn w-100 btn-outline-success mt-auto">
-                    Logout
-                </a>
-            </div>
-        </nav>
-    </section>
-    <!-- Content -->
-    <section class="d-flex flex-column flex-grow-1 overflow-auto">
-        <!-- Header -->
+<!-- layout -->
+<div class="d-flex flex-column flex-md-row vh-100 {{ config_option('portal.background', 'bg-white') }}">
+    {% if config.get("NAVIGATION_MODE", "text") == "text" %}
+        {% include "sidebars/text.html" with context %}
+    {% elif config.get("NAVIGATION_MODE") == "icon" %}
+        {% include "sidebars/icon.html" with context %}
+    {% endif %}
+    <!-- content -->
+    <section class="flex-grow-1 d-flex flex-column overflow-auto">
+        <!-- header -->
         <header>
-            <nav class="navbar navbar-light border-bottom border-secondary">
-                <h1 class="text-dark">{% block title %}&nbsp;{% endblock %}</h1>
-                <form class="inline-form">
-                    {% block title_call_to_action %}
-                    {% endblock %}
-                </form>
+            {% block title_navigation %}
+            <nav class="navbar border-bottom px-3 {{ config_option('portal.header', 'navbar-light border-secondary') }}">
+                <h1 class="{{ config_option('portal.header_title', 'text-dark') }}">{% block title %}&nbsp;{% endblock %}</h1>
+                {% block title_call_to_action %}
+                {% endblock %}
             </nav>
+            {% endblock %}
         </header>
-        <!-- Main Content -->
-        <main role="main" class="container-fluid flex-grow-1 mt-2">
+        <!-- main -->
+        <main role="main" class="container-fluid flex-grow-1 mt-2 {{ config_option('portal.content', 'bg-transparent') }}">
             {% block content %}
             {% endblock %}
         </main>
-        <!-- Footer -->
-        <footer class="d-flex flex-row justify-content-center bg-light p-2">
+        <!-- footer -->
+        <footer class="d-flex flex-row justify-content-center p-2 {{ config_option('portal.footer', 'bg-light') }}">
             <div>{{ config["FOOTER_MESSAGE"] }}</div>
         </footer>
     </section>

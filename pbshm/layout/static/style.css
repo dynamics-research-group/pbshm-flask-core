@@ -1,20 +1,26 @@
 /* Generic Elements */
-img.drg-logo{
-    filter:invert(80%);
+img.app-logo {
+    filter: invert(80%);
+    width:4rem;
+    aspect-ratio: auto;
+    object-fit: contain;
 }
 /* Login Layout */
-.login-form{
+.login-form {
     max-width: 500px;
 }
-.login-form img.drg-logo{
+.login-form img.app-logo {
     width: 12rem;
 }
 /* Portal Layout */
 @media (min-width: 768px) {
-    .side-section{
-        flex-basis: 15rem;
+    .sidebar-text{
+        flex-basis: 12rem !important;
+    }
+    .sidebar-icon{
+        flex-basis: 5rem !important;
     }
 }
-a.navbar-brand img{
+a.navbar-brand img {
     width: 3rem;
 }
