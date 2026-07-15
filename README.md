@@ -12,31 +12,17 @@ pip install pbshm-core
 ```
 
 ## Setup
-Set the Flask application path and environment.
-
-For Linux/Mac:
-```
-export FLASK_APP=pbshm
-export FLASK_DEBUG=1
-```
-
-For Windows:
-```
-set FLASK_APP=pbshm
-set FLASK_DEBUG=1
-```
-
 Configure settings and initialise the database with a new root user:
 ```
-flask init config
-flask init db new-root-user
+flask --app=pbshm.app init config
+flask --app=pbshm.app init db new-root-user
 ```
 The above steps will prompt you for all the required fields to set up the system.
 
 ## Running
 The application is run via the standard Flask command:
 ```
-flask run
+flask --app=pbshm.app run
 ```
 
 ## Accessing data
@@ -72,17 +58,17 @@ The PBSHM Core comes with a few tools which are available via the mechanic and t
 
 To retrieve all versions of the PBSHM Schema available for installation, use the following command:
 ```
-flask mechanic versions
+flask --app=pbshm.app mechanic versions
 ``` 
 
 To create a new collection with the latest version of the PBSHM Schema installed within the collection, use the following command:
 ```
-flask mechanic new-structure-collection collection-name
+flask --app=pbshm.app mechanic new-structure-collection collection-name
 ```
 
 To create a new collection with a specific version of the PBSHM Schema installed within the collection, use the following command:
 ```
-flask mechanic new-structure-collection collection-name --version=v1.0
+flask --app=pbshm.app mechanic new-structure-collection collection-name --version=v1.0
 ```
 
 To convert a python `datetime` object into UTC nanoseconds since epoch, use the following code:
