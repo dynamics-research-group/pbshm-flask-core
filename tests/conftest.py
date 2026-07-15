@@ -6,7 +6,7 @@ from flask.testing import FlaskClient
 import pymongo
 import pytest
 
-from pbshm import create_app
+from pbshm.app import create_app
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=False)
 def pytest_sessionstart():
