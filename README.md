@@ -1,7 +1,7 @@
 # PBSHM Core
 PBSHM Core is a minimal application built on [Flask](https://github.com/pallets/flask) to enable development of PBSHM modules that consume [PBSHM Schema](https://github.com/dynamics-research-group/pbshm-schema) data. It was designed to deal with all the basic requirements of a PBSHM system, allowing developers to focus on implementation of PBSHM modules. 
 
-The application includes a `initialisation` module to configure and set up the system, a `authentication` module to provide permission-based authorisation of controls, a `layout` module to provide an app wide layout, a `timekeeper` module to enable conversion between native python `datetime` objects and the PBSHM Schema `timestamp` format, and finally a `mechanic` module to facilitate easy interaction between available PBSHM Schema versions and your local database. The minimum version of Python required to run the PBSHM Core is version 3.8.10.
+The application includes a `initialisation` module to configure and set up the system, a `authentication` module to provide permission-based authorisation of controls, a `layout` module to provide an app wide layout, a `timekeeper` module to enable conversion between native python `datetime` objects and the PBSHM Schema `timestamp` format, and finally a `mechanic` module to facilitate easy interaction between available PBSHM Schema versions and your local database. The minimum version of Python required to run the PBSHM Core is version 3.12.
 
 For more information on how to create a module for PBSHM Core, please see the [module template](https://github.com/dynamics-research-group/pbshm-module-template) repository.
 
@@ -54,7 +54,7 @@ for document in default_collection().aggregate([
 ```
 
 ## Tools
-The PBSHM Core comes with a few tools which are available via the mechanic and timekeeper modules. The mechanic module enables easy interaction with the PBSHM Schema and your local database. The timekeeper module enables conversions from native python `datetime` objects into the `timestamp` format stored within the PBSHM Schema.
+The PBSHM Core comes with a few tools which are available via the `mechanic` and `timekeeper` modules. The `mechanic` module enables easy interaction with the PBSHM Schema and your local database. The `timekeeper` module enables conversions from native python `datetime` objects into the `timestamp` format stored within the PBSHM Schema.
 
 To retrieve all versions of the PBSHM Schema available for installation, use the following command:
 ```
